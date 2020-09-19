@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VYT.DAL
+{
+    public class DALFactory
+    {
+        private static DALFactory _uniqueInstance;
+        private static readonly object _lockObject = new object();
+
+        private DALFactory() { }
+
+        public static DALFactory GetInstance()
+        {
+            if (_uniqueInstance == null)
+            {
+                lock (_lockObject)
+                {
+                    if (_uniqueInstance == null)
+                    {
+                        _uniqueInstance = new DALFactory();
+                    }
+                }
+            }
+
+            return _uniqueInstance;
+        }
+    }
+}

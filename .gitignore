@@ -3,3 +3,7 @@
 ################################################################################
 
 /Code/src/server/VYT/.vs/VYT
+/Code/src/server/VYT/packages
+/Code/src/server/VYT/VYT.DAL/obj/Debug
+/Code/src/server/VYT/VYT.Models/obj/Debug
+/Code/src/server/VYT/VYT.UnitTests/obj/Debug
