@@ -17,6 +17,7 @@ namespace VYT.ApplicationService.Controllers
 {
     public class JobController : ApiController
     {
+        private const string FILE_STORAGE = "~/FileStorage";
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IUnitOfWork _uow = DALFactory.GetInstance().CreateUnitOfWork();
 
@@ -40,7 +41,7 @@ namespace VYT.ApplicationService.Controllers
         public void Remove(int id)
         {
             _uow.JobRepository.Remove(id);
-            var fileStorage = HttpContext.Current.Server.MapPath("~/App_Data/FileStorage");
+            var fileStorage = HttpContext.Current.Server.MapPath("~/FileStorage");
             var jobFolderFile = Path.Combine(fileStorage, id.ToString());
             FileUtil.DeleteFolder(jobFolderFile);
         }
@@ -49,14 +50,13 @@ namespace VYT.ApplicationService.Controllers
         [HttpPost]
         [Route("api/Job/Create")]
         public async Task<HttpResponseMessage> CreateJobFromFile()
-        {
-            // Check if the request contains multipart/form-data.
+        {            
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var uploadFolder = HttpContext.Current.Server.MapPath("~/App_Data/uploads");            
+            var uploadFolder = HttpContext.Current.Server.MapPath(FILE_STORAGE);
             if (!Directory.Exists(uploadFolder))
             {
                 Directory.CreateDirectory(uploadFolder);
@@ -76,17 +76,17 @@ namespace VYT.ApplicationService.Controllers
 
                     var job = _uow.JobRepository.Add(new VYT.Models.Job()
                     {
-                        Name = file.Headers.ContentDisposition.FileName,
+                        Name = file.Headers.ContentDisposition.FileName.Trim('"'),
                         Languages = provider.FormData["Languages"]
                     });
 
-                    var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/FileStorage"), job.Id.ToString());
+                    var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), job.Id.ToString());
                     if (!Directory.Exists(fileStorage))
                     {
                         Directory.CreateDirectory(fileStorage);
                     }
 
-                    var filePath = Path.Combine(fileStorage, Path.GetFileName(file.LocalFileName));
+                    var filePath = Path.Combine(fileStorage, $"{job.Id}_{job.Name}");
                     filePath = FileUtil.NextAvailableFilename(filePath);
                     File.Move(file.LocalFileName, filePath);
 
@@ -104,10 +104,11 @@ namespace VYT.ApplicationService.Controllers
         [Route("api/Job/GetFiles")]
         public IEnumerable<JobFile> GetJobFiles(int id, int type)
         {
-            var files = _uow.JobRepository.GetJobFiles(id, type);            
+            var files = _uow.JobRepository.GetJobFiles(id, type);
+            var baseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath.TrimEnd('/');
             foreach (var file in files)
             {
-                file.FilePath = $"http://{HttpContext.Current.Request.Url.Host}:{HttpContext.Current.Request.Url.Port}/App_Data/FileStorage/{id}/{Path.GetFileName(file.FilePath)}";
+                file.FilePath = $"{baseUrl}/FileStorage/{id}/{Path.GetFileName(file.FilePath)}";
             }
             return files;
         }

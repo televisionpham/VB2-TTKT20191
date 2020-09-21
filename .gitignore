@@ -22,3 +22,13 @@
 /Code/src/server/VYT/VYT.ProcessingStation.Service/obj/Debug
 /Code/src/server/VYT/VYT.UnitTests/bin/Debug
 /tesseract-ocr-w64-setup-v5.0.0-alpha.20200328.exe
+/Code/src/server/VYT/VYT.ApplicationService/obj/Release
+/Code/src/server/VYT/VYT.ApplicationService/FileStorage/9
+/Code/src/server/VYT/VYT.ApplicationService/Publish
+/Code/src/server/VYT/VYT.DAL/bin/Release
+/Code/src/server/VYT/VYT.DAL/obj/Release
+/Code/src/server/VYT/VYT.Models/bin/Release
+/Code/src/server/VYT/VYT.Models/obj/Release
+/Code/src/server/VYT/VYT.ProcessingStation/obj/Release
+/Code/src/server/VYT/VYT.ProcessingStation.Service/obj/Release
+/Code/src/server/VYT/VYT.UnitTests/obj/Release

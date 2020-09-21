@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VYT.DAL.Abstract
 {
-    public interface IJobLogRepository : IRepository<JobLog>
+    public interface IJobLogRepository : IRepository<Models.JobLog>
     {
     }
 }

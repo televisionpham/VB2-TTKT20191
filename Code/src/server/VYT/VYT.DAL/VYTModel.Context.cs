@@ -142,5 +142,51 @@ namespace VYT.DAL
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetFile_Result>("usp_Job_GetFile", jobIdParameter, typeParameter);
         }
+    
+        public virtual ObjectResult<usp_JobLog_Add_Result> usp_JobLog_Add(string name, Nullable<System.DateTime> created, Nullable<int> state, Nullable<int> documentPages, Nullable<long> duration, Nullable<System.DateTime> processed, string notes)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var createdParameter = created.HasValue ?
+                new ObjectParameter("created", created) :
+                new ObjectParameter("created", typeof(System.DateTime));
+    
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(int));
+    
+            var documentPagesParameter = documentPages.HasValue ?
+                new ObjectParameter("documentPages", documentPages) :
+                new ObjectParameter("documentPages", typeof(int));
+    
+            var durationParameter = duration.HasValue ?
+                new ObjectParameter("duration", duration) :
+                new ObjectParameter("duration", typeof(long));
+    
+            var processedParameter = processed.HasValue ?
+                new ObjectParameter("processed", processed) :
+                new ObjectParameter("processed", typeof(System.DateTime));
+    
+            var notesParameter = notes != null ?
+                new ObjectParameter("notes", notes) :
+                new ObjectParameter("notes", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_JobLog_Add_Result>("usp_JobLog_Add", nameParameter, createdParameter, stateParameter, documentPagesParameter, durationParameter, processedParameter, notesParameter);
+        }
+    
+        public virtual ObjectResult<usp_JobLog_GetPage_Result> usp_JobLog_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
+        {
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("pageIndex", pageIndex) :
+                new ObjectParameter("pageIndex", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_JobLog_GetPage_Result>("usp_JobLog_GetPage", pageIndexParameter, pageSizeParameter);
+        }
     }
 }

@@ -10,9 +10,8 @@
 namespace VYT.DAL
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class JobLog
+    public partial class usp_JobLog_GetPage_Result
     {
         public int Id { get; set; }
         public string Name { get; set; }

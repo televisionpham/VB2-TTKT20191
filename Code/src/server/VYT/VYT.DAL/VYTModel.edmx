@@ -41,6 +41,7 @@
           <Property Name="DocumentPages" Type="int" Nullable="false" />
           <Property Name="Duration" Type="bigint" />
           <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Processed" Type="datetime2" Precision="7" />
         </EntityType>
         <Association Name="FK_FileStorage_Job">
           <End Role="Job" Type="Self.Job" Multiplicity="1">
@@ -87,6 +88,19 @@
           <Parameter Name="duration" Type="bigint" Mode="In" />
           <Parameter Name="notes" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="documentPages" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_JobLog_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="created" Type="datetime2" Mode="In" />
+          <Parameter Name="state" Type="int" Mode="In" />
+          <Parameter Name="documentPages" Type="int" Mode="In" />
+          <Parameter Name="duration" Type="bigint" Mode="In" />
+          <Parameter Name="processed" Type="datetime2" Mode="In" />
+          <Parameter Name="notes" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="usp_JobLog_GetPage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pageIndex" Type="int" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="VYT_TTKTModelStoreContainer">
           <EntitySet Name="FileStorage" EntityType="Self.FileStorage" Schema="dbo" store:Type="Tables" />
@@ -139,6 +153,7 @@
           <Property Name="DocumentPages" Type="Int32" Nullable="false" />
           <Property Name="Duration" Type="Int64" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Processed" Type="DateTime" Precision="7" />
         </EntityType>
         <Association Name="FK_FileStorage_Job">
           <End Role="Job" Type="Self.Job" Multiplicity="1">
@@ -195,6 +210,19 @@
             <Parameter Name="jobId" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="usp_JobLog_Add" ReturnType="Collection(VYT_TTKTModel.usp_JobLog_Add_Result)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="created" Mode="In" Type="DateTime" />
+            <Parameter Name="state" Mode="In" Type="Int32" />
+            <Parameter Name="documentPages" Mode="In" Type="Int32" />
+            <Parameter Name="duration" Mode="In" Type="Int64" />
+            <Parameter Name="processed" Mode="In" Type="DateTime" />
+            <Parameter Name="notes" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_JobLog_GetPage" ReturnType="Collection(VYT_TTKTModel.usp_JobLog_GetPage_Result)">
+            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="usp_Job_Add_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -235,6 +263,26 @@
           <Property Type="String" Name="FilePath" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="FileType" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <ComplexType Name="usp_JobLog_Add_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="DateTime" Name="Processed" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_JobLog_GetPage_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="DateTime" Name="Processed" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -271,6 +319,7 @@
           <EntitySetMapping Name="JobLogs">
             <EntityTypeMapping TypeName="VYT_TTKTModel.JobLog">
               <MappingFragment StoreEntitySet="JobLog">
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
@@ -336,6 +385,34 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="FileType" ColumnName="FileType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_JobLog_Add" FunctionName="VYT_TTKTModel.Store.usp_JobLog_Add">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_JobLog_Add_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_JobLog_GetPage" FunctionName="VYT_TTKTModel.Store.usp_JobLog_GetPage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_JobLog_GetPage_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

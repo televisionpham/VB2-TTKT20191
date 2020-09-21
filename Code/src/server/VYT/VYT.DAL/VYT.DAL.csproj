@@ -72,6 +72,12 @@
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="usp_JobLog_Add_Result.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_JobLog_GetPage_Result.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="usp_Job_Add_Result.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
