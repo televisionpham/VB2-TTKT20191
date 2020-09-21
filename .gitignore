@@ -32,3 +32,5 @@
 /Code/src/server/VYT/VYT.ProcessingStation/obj/Release
 /Code/src/server/VYT/VYT.ProcessingStation.Service/obj/Release
 /Code/src/server/VYT/VYT.UnitTests/obj/Release
+/Code/src/server/VYT/VYT.ApplicationServiceClient/bin/Debug
+/Code/src/server/VYT/VYT.ApplicationServiceClient/obj/Debug

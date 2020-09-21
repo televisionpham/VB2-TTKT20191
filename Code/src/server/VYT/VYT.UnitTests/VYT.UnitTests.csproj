@@ -57,9 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\UnitOfWorkTests.cs" />
-    <Compile Include="OcrProcessor\OcrProcessorTests.cs" />
+    <Compile Include="OcrProcessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebApiClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -72,6 +72,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\VYT.ApplicationServiceClient\VYT.ApplicationServiceClient.csproj">
+      <Project>{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}</Project>
+      <Name>VYT.ApplicationServiceClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VYT.Models\VYT.Models.csproj">
+      <Project>{806FD456-D38E-4610-8BC0-962E700F9BC5}</Project>
+      <Name>VYT.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VYT.ProcessingStation.Service\VYT.ProcessingStation.Service.csproj">
       <Project>{53ba13c9-cb2b-42c3-a843-dd5318f8852b}</Project>
       <Name>VYT.ProcessingStation.Service</Name>

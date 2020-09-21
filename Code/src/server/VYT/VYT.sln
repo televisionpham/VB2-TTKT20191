@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VYT.ProcessingStation", "VY
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VYT.ApplicationService", "VYT.ApplicationService\VYT.ApplicationService.csproj", "{C77AA2B2-4EB8-43F7-B98C-C48F25C25AEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VYT.ApplicationServiceClient", "VYT.ApplicationServiceClient\VYT.ApplicationServiceClient.csproj", "{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{C77AA2B2-4EB8-43F7-B98C-C48F25C25AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C77AA2B2-4EB8-43F7-B98C-C48F25C25AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C77AA2B2-4EB8-43F7-B98C-C48F25C25AEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
