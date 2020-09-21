@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="VYT_TTKTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="VYT_TTKTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="FileStorage">
           <Key>
             <PropertyRef Name="Id" />
@@ -56,6 +56,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="usp_Job_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="languages" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_AddFile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jobId" Type="int" Mode="In" />
+          <Parameter Name="type" Type="int" Mode="In" />
+          <Parameter Name="fileSize" Type="bigint" Mode="In" />
+          <Parameter Name="fileType" Type="nvarchar" Mode="In" />
+          <Parameter Name="filePath" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jobId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jobId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_GetFile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jobId" Type="int" Mode="In" />
+          <Parameter Name="type" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_GetPage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pageIndex" Type="int" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Job_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="state" Type="int" Mode="In" />
+          <Parameter Name="duration" Type="bigint" Mode="In" />
+          <Parameter Name="notes" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="documentPages" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="VYT_TTKTModelStoreContainer">
           <EntitySet Name="FileStorage" EntityType="Self.FileStorage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
@@ -65,8 +97,7 @@
             <End Role="FileStorage" EntitySet="FileStorage" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="VYT_TTKTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -131,7 +162,79 @@
             <End Role="Job" EntitySet="Jobs" />
             <End Role="FileStorage" EntitySet="FileStorages" />
           </AssociationSet>
+          <FunctionImport Name="usp_Job_Add" ReturnType="Collection(VYT_TTKTModel.usp_Job_Add_Result)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="languages" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_AddFile">
+            <Parameter Name="jobId" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="Int32" />
+            <Parameter Name="fileSize" Mode="In" Type="Int64" />
+            <Parameter Name="fileType" Mode="In" Type="String" />
+            <Parameter Name="filePath" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_Get" ReturnType="Collection(VYT_TTKTModel.usp_Job_Get_Result)">
+          <Parameter Name="jobId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_GetPage" ReturnType="Collection(VYT_TTKTModel.usp_Job_GetPage_Result)">
+            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_GetTotal" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="usp_Job_Delete">
+          <Parameter Name="jobId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_Update">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="state" Mode="In" Type="Int32" />
+            <Parameter Name="duration" Mode="In" Type="Int64" />
+            <Parameter Name="notes" Mode="In" Type="String" />
+            <Parameter Name="documentPages" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_GetFile" ReturnType="Collection(VYT_TTKTModel.usp_Job_GetFile_Result)">
+            <Parameter Name="jobId" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="usp_Job_Add_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="String" Name="Languages" Nullable="false" MaxLength="250" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="usp_Job_Get_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="String" Name="Languages" Nullable="false" MaxLength="250" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_Job_GetPage_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="String" Name="Languages" Nullable="false" MaxLength="250" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="usp_Job_GetFile_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="JobId" Nullable="false" />
+          <Property Type="Int32" Name="Type" Nullable="false" />
+          <Property Type="Int64" Name="FileSize" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FilePath" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="FileType" Nullable="true" MaxLength="10" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -178,6 +281,64 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_Add" FunctionName="VYT_TTKTModel.Store.usp_Job_Add">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_Add_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_AddFile" FunctionName="VYT_TTKTModel.Store.usp_Job_AddFile" />
+          <FunctionImportMapping FunctionImportName="usp_Job_Get" FunctionName="VYT_TTKTModel.Store.usp_Job_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_GetPage" FunctionName="VYT_TTKTModel.Store.usp_Job_GetPage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_GetPage_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_Delete" FunctionName="VYT_TTKTModel.Store.usp_Job_Delete" />
+          <FunctionImportMapping FunctionImportName="usp_Job_Update" FunctionName="VYT_TTKTModel.Store.usp_Job_Update" />
+          <FunctionImportMapping FunctionImportName="usp_Job_GetFile" FunctionName="VYT_TTKTModel.Store.usp_Job_GetFile">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_GetFile_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

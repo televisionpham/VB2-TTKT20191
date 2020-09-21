@@ -12,6 +12,8 @@ namespace VYT.DAL
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class VYT_TTKTEntities : DbContext
     {
@@ -28,5 +30,117 @@ namespace VYT.DAL
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<JobLog> JobLogs { get; set; }
+    
+        public virtual ObjectResult<usp_Job_Add_Result> usp_Job_Add(string name, string languages)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var languagesParameter = languages != null ?
+                new ObjectParameter("languages", languages) :
+                new ObjectParameter("languages", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Add_Result>("usp_Job_Add", nameParameter, languagesParameter);
+        }
+    
+        public virtual int usp_Job_AddFile(Nullable<int> jobId, Nullable<int> type, Nullable<long> fileSize, string fileType, string filePath)
+        {
+            var jobIdParameter = jobId.HasValue ?
+                new ObjectParameter("jobId", jobId) :
+                new ObjectParameter("jobId", typeof(int));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(int));
+    
+            var fileSizeParameter = fileSize.HasValue ?
+                new ObjectParameter("fileSize", fileSize) :
+                new ObjectParameter("fileSize", typeof(long));
+    
+            var fileTypeParameter = fileType != null ?
+                new ObjectParameter("fileType", fileType) :
+                new ObjectParameter("fileType", typeof(string));
+    
+            var filePathParameter = filePath != null ?
+                new ObjectParameter("filePath", filePath) :
+                new ObjectParameter("filePath", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_AddFile", jobIdParameter, typeParameter, fileSizeParameter, fileTypeParameter, filePathParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_Get_Result> usp_Job_Get(Nullable<int> jobId)
+        {
+            var jobIdParameter = jobId.HasValue ?
+                new ObjectParameter("jobId", jobId) :
+                new ObjectParameter("jobId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result>("usp_Job_Get", jobIdParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_GetPage_Result> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
+        {
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("pageIndex", pageIndex) :
+                new ObjectParameter("pageIndex", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> usp_Job_GetTotal()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("usp_Job_GetTotal");
+        }
+    
+        public virtual int usp_Job_Delete(Nullable<int> jobId)
+        {
+            var jobIdParameter = jobId.HasValue ?
+                new ObjectParameter("jobId", jobId) :
+                new ObjectParameter("jobId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_Delete", jobIdParameter);
+        }
+    
+        public virtual int usp_Job_Update(Nullable<int> id, Nullable<int> state, Nullable<long> duration, string notes, Nullable<int> documentPages)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(int));
+    
+            var durationParameter = duration.HasValue ?
+                new ObjectParameter("duration", duration) :
+                new ObjectParameter("duration", typeof(long));
+    
+            var notesParameter = notes != null ?
+                new ObjectParameter("notes", notes) :
+                new ObjectParameter("notes", typeof(string));
+    
+            var documentPagesParameter = documentPages.HasValue ?
+                new ObjectParameter("documentPages", documentPages) :
+                new ObjectParameter("documentPages", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_Update", idParameter, stateParameter, durationParameter, notesParameter, documentPagesParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_GetFile_Result> usp_Job_GetFile(Nullable<int> jobId, Nullable<int> type)
+        {
+            var jobIdParameter = jobId.HasValue ?
+                new ObjectParameter("jobId", jobId) :
+                new ObjectParameter("jobId", typeof(int));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetFile_Result>("usp_Job_GetFile", jobIdParameter, typeParameter);
+        }
     }
 }

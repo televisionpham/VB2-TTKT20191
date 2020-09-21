@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VYT.DAL.Abstract;
+using VYT.DAL.Concrete;
 
 namespace VYT.DAL
 {
@@ -27,6 +29,11 @@ namespace VYT.DAL
             }
 
             return _uniqueInstance;
+        }
+
+        public IUnitOfWork CreateUnitOfWork()
+        {
+            return new UnitOfWork(new VYT_TTKTEntities());
         }
     }
 }

@@ -15,9 +15,8 @@ namespace VYT.Models
         public string InputFile { get; set; }
         public JobStateEnum State { get; set; }        
         public int DocumentPages { get; set; }
-        public TimeSpan Duration { get; set; }
+        public TimeSpan Duration { get; set; } = TimeSpan.Zero;
         public string Notes { get; set; }
-        public IList<string> OutputDocuments { get; } = new List<string>();
-        public OcrSettings OcrSettings { get; } = new OcrSettings();
+        public IList<string> OutputDocuments { get; } = new List<string>();        
     }
 }

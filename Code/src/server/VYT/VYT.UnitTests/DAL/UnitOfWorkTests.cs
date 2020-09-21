@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace VYT.UnitTests.DAL
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitOfWorkTests
     {
         [TestMethod]
         public void TestMethod1()

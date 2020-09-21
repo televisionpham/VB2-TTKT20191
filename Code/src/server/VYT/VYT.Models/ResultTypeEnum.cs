@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace VYT.Models
 {
-    public class OcrSettings
+    public enum ResultTypeEnum
     {
+        InputImage = 0,
+        OcrResult = 1
     }
 }

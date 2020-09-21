@@ -52,11 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="JobFile.cs" />
     <Compile Include="JobLog.cs" />
     <Compile Include="JobStateEnum.cs" />
     <Compile Include="Job.cs" />
-    <Compile Include="OcrSettings.cs" />
+    <Compile Include="OcrStation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileUtil.cs" />
+    <Compile Include="ResultTypeEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
