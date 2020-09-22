@@ -10,7 +10,7 @@ namespace VYT.DAL
 {
     public class DALFactory
     {
-        private static DALFactory _uniqueInstance;
+        private static volatile DALFactory _uniqueInstance;
         private static readonly object _lockObject = new object();
 
         private DALFactory() { }

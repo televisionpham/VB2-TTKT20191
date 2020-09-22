@@ -86,10 +86,26 @@ namespace VYT.DAL.Concrete
             _dbContext.usp_Job_Update(entity.Id, (int)entity.State, entity.Duration.Ticks, entity.Notes, entity.DocumentPages);
         }
 
-        public void AddJobFile(int jobId, string filePath, ResultTypeEnum type)
+        public JobFile AddJobFile(int jobId, string filePath, ResultTypeEnum type)
         {
             var fi = new FileInfo(filePath);
-            _dbContext.usp_Job_AddFile(jobId, (int)type, fi.Length, Path.GetExtension(filePath), filePath);
+            var result = _dbContext.usp_Job_AddFile(jobId, (int)type, fi.Length, Path.GetExtension(filePath), filePath).FirstOrDefault();
+            if (result != null)
+            {
+                return new JobFile
+                {
+                    Id = result.Id,
+                    FileExtension = result.FileType,
+                    FileName = Path.GetFileName(filePath),
+                    FilePath = filePath,
+                    FileSize = fi.Length,
+                    Type = type
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IEnumerable<JobFile> GetJobFiles(int id, int type)
@@ -115,6 +131,27 @@ namespace VYT.DAL.Concrete
                 }
             }
             return files;
+        }
+
+        public IEnumerable<Models.Job> GetByState(JobStateEnum state, int limit)
+        {
+            var jobs = new List<Models.Job>();
+            var results = _dbContext.usp_Job_GetByState((int)state, limit);
+            foreach (var item in results)
+            {
+                jobs.Add(new Models.Job
+                {
+                    Id = item.Id,
+                    CreatedDate = item.Created,
+                    DocumentPages = item.DocumentPages,
+                    Duration = item.Duration.HasValue ? TimeSpan.FromTicks(item.Duration.Value) : TimeSpan.Zero,
+                    Languages = item.Languages,
+                    Name = item.Name,
+                    Notes = item.Notes,
+                    State = (JobStateEnum)item.State
+                });
+            }
+            return jobs;
         }
     }
 }

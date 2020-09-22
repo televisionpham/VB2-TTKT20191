@@ -4,35 +4,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VYT.Models;
 
 namespace VYT.ProcessingStation.Service
 {
-    public class ProcessManager
-    {
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private static ProcessManager _uniqueInstance;
-        private static readonly object _lockObject = new object();
+    internal class ProcessManager : ManagerBase
+    {        
         private List<OcrProcessor> _processors = new List<OcrProcessor>();
 
-        private ProcessManager()
+        public ProcessManager(OcrStation ocrStation) : base(ocrStation)
         {
-
         }
 
-        public static ProcessManager GetInstance()
+        public override void Start()
         {
-            if (_uniqueInstance == null)
+            try
             {
-                lock (_lockObject)
+                _processors.Clear();
+                for (int i = 0; i < _ocrStation.OcrProcessesCount; i++)
                 {
-                    if (_uniqueInstance == null)
-                    {
-                        _uniqueInstance = new ProcessManager();
-                    }
+                    _processors.Add(new OcrProcessor(_ocrStation));
                 }
+                
             }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
 
-            return _uniqueInstance;
+        public override void Stop()
+        {
+            try
+            {
+                foreach (var processor in _processors)
+                {
+                    processor.Stop();
+                }
+                _processors.Clear();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
+
+        public OcrProcessor GetFreeProcess()
+        {
+            return _processors.FirstOrDefault(x => x.IsFree);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace VYT.Models
 {
     public class JobFile
     {
+        public int Id { get; set; }
         public string FilePath { get; set; }
         public ResultTypeEnum Type { get; set; }
         public string FileName { get; set; }

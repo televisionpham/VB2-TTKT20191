@@ -9,5 +9,6 @@ namespace VYT.Models
     public static class Constants
     {
         public static readonly string ProcessingStationTempFolder = "ProcessingStationTemp";
+        public static readonly string ConfigFolder = "Config";
     }
 }

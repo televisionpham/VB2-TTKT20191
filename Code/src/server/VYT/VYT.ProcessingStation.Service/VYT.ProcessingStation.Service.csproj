@@ -49,12 +49,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlCenter.cs" />
+    <Compile Include="JobManager.cs" />
+    <Compile Include="ManagerBase.cs" />
     <Compile Include="OcrProcessor.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VYT.ApplicationServiceClient\VYT.ApplicationServiceClient.csproj">
+      <Project>{67b47f7d-06ea-4cb9-9af3-e6efe3ea21ce}</Project>
+      <Name>VYT.ApplicationServiceClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VYT.Models\VYT.Models.csproj">
+      <Project>{806FD456-D38E-4610-8BC0-962E700F9BC5}</Project>
+      <Name>VYT.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

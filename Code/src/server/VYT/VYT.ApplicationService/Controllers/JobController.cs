@@ -38,6 +38,13 @@ namespace VYT.ApplicationService.Controllers
             return _uow.JobRepository.GetPage(pageIndex, pageSize);
         }
 
+        [HttpGet]
+        [Route("api/Job/GetByState")]
+        public IEnumerable<VYT.Models.Job> GetByState(JobStateEnum state, int limit)
+        {
+            return _uow.JobRepository.GetByState(state, limit);
+        }
+
         [HttpPut]
         public void Update([FromBody]VYT.Models.Job job)
         {
@@ -77,31 +84,100 @@ namespace VYT.ApplicationService.Controllers
              
                 foreach (MultipartFileData file in provider.FileData)
                 {
-                    _logger.Trace($"{"Server file path: " + file.LocalFileName}; File Name: {file.Headers.ContentDisposition.FileName}");                    
-
-                    var job = _uow.JobRepository.Add(new VYT.Models.Job()
+                    //_logger.Trace($"{"Server file path: " + file.LocalFileName}; File Name: {file.Headers.ContentDisposition.FileName}");
+                    try
                     {
-                        Name = file.Headers.ContentDisposition.FileName.Trim('"'),
-                        Languages = provider.FormData["Languages"]
-                    });
+                        var job = _uow.JobRepository.Add(new VYT.Models.Job()
+                        {
+                            Name = file.Headers.ContentDisposition.FileName.Trim('"'),
+                            Languages = provider.FormData["Languages"]
+                        });
 
-                    var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), job.Id.ToString());
-                    if (!Directory.Exists(fileStorage))
-                    {
-                        Directory.CreateDirectory(fileStorage);
+                        var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), job.Id.ToString());
+                        if (!Directory.Exists(fileStorage))
+                        {
+                            Directory.CreateDirectory(fileStorage);
+                        }
+
+                        var filePath = Path.Combine(fileStorage, $"{job.Id}_0_{job.Name}");
+                        filePath = FileUtil.NextAvailableFilename(filePath);
+                        File.Move(file.LocalFileName, filePath);
+
+                        _uow.JobRepository.AddJobFile(job.Id, filePath, ResultTypeEnum.InputImage);
+                        return job;
                     }
-
-                    var filePath = Path.Combine(fileStorage, $"{job.Id}_0_{job.Name}");
-                    filePath = FileUtil.NextAvailableFilename(filePath);
-                    File.Move(file.LocalFileName, filePath);
-
-                    _uow.JobRepository.AddJobFile(job.Id, filePath, ResultTypeEnum.InputImage);
-                    return job;
+                    catch (Exception)
+                    {
+                        FileUtil.DeleteFile(file.LocalFileName);
+                        throw;
+                    }
                 }
                 return null;
             }
             catch (System.Exception e)
             {
+                throw e;
+            }
+        }
+
+        [ValidateMimeMultipartContentFilter]
+        [HttpPost]
+        [Route("api/Job/AddFile")]
+        public async Task<JobFile> AddJobFile()
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var uploadFolder = HttpContext.Current.Server.MapPath(FILE_STORAGE);
+            if (!Directory.Exists(uploadFolder))
+            {
+                Directory.CreateDirectory(uploadFolder);
+            }
+
+            var provider = new MultipartFormDataStreamProvider(uploadFolder);
+
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                foreach (MultipartFileData file in provider.FileData)
+                {                    
+                    try
+                    {
+                        var jobId = provider.FormData["JobId"];
+                        var job = _uow.JobRepository.Get(int.Parse(jobId));
+                        if (job == null)
+                        {
+                            throw new Exception($"Không tìm thấy job ID: {jobId}");
+                        }
+
+                        var type = provider.FormData["JobFileType"];
+                        var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), jobId);
+                        if (!Directory.Exists(fileStorage))
+                        {
+                            Directory.CreateDirectory(fileStorage);
+                        }
+                        var fileName = file.Headers.ContentDisposition.FileName.Trim('"');
+                        var filePath = Path.Combine(fileStorage, $"{jobId}_{type}{Path.GetExtension(fileName)}");
+                        filePath = FileUtil.NextAvailableFilename(filePath);
+                        File.Move(file.LocalFileName, filePath);
+
+                        var jobFile = _uow.JobRepository.AddJobFile(job.Id, filePath, (ResultTypeEnum)(int.Parse(type)));
+                        return jobFile;
+                    }
+                    catch (Exception ex)
+                    {
+                        FileUtil.DeleteFile(file.LocalFileName);
+                        throw ex;
+                    }                    
+                }
+                return null;
+            }
+            catch (System.Exception e)
+            {
+                _logger.Error(e);
                 throw e;
             }
         }

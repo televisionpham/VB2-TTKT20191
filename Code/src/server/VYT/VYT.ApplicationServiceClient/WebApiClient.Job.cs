@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VYT.Models;
 
 namespace VYT.ApplicationServiceClient
 {
@@ -19,57 +20,75 @@ namespace VYT.ApplicationServiceClient
         public async Task<int> GetTotalJobs()
         {
             var path = $"{_client.BaseAddress}/api/Job/Total";
-            var response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsAsync<int>();
+                var result = await resp.Content.ReadAsAsync<int>();
                 return result;
             }
             else
             {
-                return 0;
+                throw new Exception($"{resp.ReasonPhrase}");
             }
         }
 
         public async Task<Models.Job> GetJob(int id)
         {
             var path = $"{_client.BaseAddress}/api/Job/{id}";
-            var response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
             {
-                var job = await response.Content.ReadAsAsync<Models.Job>();
+                var job = await resp.Content.ReadAsAsync<Models.Job>();
                 return job;
             }
-            return null;
+            else
+            {
+                throw new Exception($"{resp.ReasonPhrase}");
+            }
         }
 
         public async Task<IEnumerable<Models.Job>> GetJobPage(int pageIndex, int pageSize)
         {
             var path = $"{_client.BaseAddress}/api/Job?pageIndex={pageIndex}&pageSize={pageSize}";
-            var response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsAsync<IEnumerable<Models.Job>>();
+                var result = await resp.Content.ReadAsAsync<IEnumerable<Models.Job>>();
                 return result;
             }
             else
             {
-                return null;
+                throw new Exception($"{resp.ReasonPhrase}");
+            }
+        }
+
+        public async Task<IEnumerable<Models.Job>> GetJobByState(JobStateEnum state, int limit)
+        {
+            var path = $"{_client.BaseAddress}/api/Job/GetByState?state={(int)state}&limit={limit}";
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = await resp.Content.ReadAsAsync<IEnumerable<Models.Job>>();
+                return result;
+            }
+            else
+            {
+                throw new Exception($"{resp.ReasonPhrase}");
             }
         }
 
         public async Task<IEnumerable<Models.JobFile>> GetJobFiles(int id, int type)
         {
             var path = $"{_client.BaseAddress}/api/Job/GetFiles?id={id}&type={type}";
-            var response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsAsync<IEnumerable<Models.JobFile>>();
+                var result = await resp.Content.ReadAsAsync<IEnumerable<Models.JobFile>>();
                 return result;
             }
             else
             {
-                return null;
+                throw new Exception($"{resp.ReasonPhrase}");
             }
         }
 
@@ -103,9 +122,48 @@ namespace VYT.ApplicationServiceClient
                 }
                 else
                 {
-                    return null;
+                    throw new Exception($"{resp.ReasonPhrase}");
                 }
             }
+        }
+
+        public async Task<Models.JobFile> AddJobFile(int jobId, string filePath, ResultTypeEnum type)
+        {
+            var path = $"{_client.BaseAddress}/api/Job/AddFile";
+            var multiForm = new MultipartFormDataContent();
+            multiForm.Add(new StringContent(jobId.ToString()), "JobId");
+            multiForm.Add(new StringContent(((int)type).ToString()), "JobFileType");
+            
+            using (var fs = File.OpenRead(filePath))
+            {
+                multiForm.Add(new StreamContent(fs), "File", Path.GetFileName(filePath));
+                var resp = await _client.PostAsync(path, multiForm);
+                if (resp.IsSuccessStatusCode)
+                {
+                    var result = await resp.Content.ReadAsAsync<Models.JobFile>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception($"{resp.ReasonPhrase}");
+                }
+            }
+        }
+
+        public async Task<HttpResponseMessage> DownloadFile(string url, string filePath)
+        {            
+            var response = await _client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            using (var ms = await response.Content.ReadAsStreamAsync())
+            {
+                using (var fs = File.Create(filePath))
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.CopyTo(fs);
+                }
+            }
+
+            return response;
         }
     }
 }

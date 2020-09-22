@@ -78,7 +78,13 @@
     <Compile Include="usp_JobLog_GetPage_Result.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="usp_Job_AddFile_Result.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="usp_Job_Add_Result.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Job_GetByState_Result.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="usp_Job_GetFile_Result.cs">

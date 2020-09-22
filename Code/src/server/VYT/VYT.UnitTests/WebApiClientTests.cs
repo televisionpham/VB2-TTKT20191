@@ -93,5 +93,31 @@ namespace VYT.UnitTests
             resp.Wait();
             Assert.IsTrue(resp.Result > 0);
         }
+
+        [TestMethod]
+        public void Can_get_job_by_state()
+        {
+            var resp = _client.GetJobByState(0, 1);
+            resp.Wait();
+            Assert.AreEqual(1, resp.Result.Count());
+        }
+
+        [TestMethod]
+        public void Can_download_file()
+        {
+            var outputFile = "E:\\Temp\\out.tif";
+            var resp = _client.DownloadFile("http://localhost/VYT.ApplicationService/FileStorage/9/9_CT20UB.tif", outputFile);
+            resp.Wait();
+            Assert.IsTrue(File.Exists(outputFile));
+        }
+
+        [TestMethod]
+        public void Can_add_job_file()
+        {
+            var filePath = @"D:\DKC\AnhMau\Original\Cong van nghieng.TIF";
+            var resp = _client.AddJobFile(9, filePath, Models.ResultTypeEnum.OcrResult);
+            resp.Wait();
+            Assert.IsTrue(resp.Result.Id > 0);
+        }
     }
 }

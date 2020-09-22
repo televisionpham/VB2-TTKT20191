@@ -9,7 +9,9 @@ namespace VYT.DAL.Abstract
 {
     public interface IJobRepository : IRepository<VYT.Models.Job>
     {
-        void AddJobFile(int jobId, string filePath, ResultTypeEnum type);
+        JobFile AddJobFile(int jobId, string filePath, ResultTypeEnum type);
         IEnumerable<JobFile> GetJobFiles(int id, int type);
+
+        IEnumerable<Models.Job> GetByState(JobStateEnum state, int limit);
     }
 }

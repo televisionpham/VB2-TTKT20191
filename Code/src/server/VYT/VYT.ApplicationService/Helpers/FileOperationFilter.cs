@@ -25,6 +25,7 @@ namespace VYT.ApplicationService.Helpers
                     required = true,
                     type = "file"
                 });
+                
                 operation.parameters.Add(new Parameter
                 {
                     name = "Languages",
@@ -33,6 +34,42 @@ namespace VYT.ApplicationService.Helpers
                     required = true,
                     type = "string"
                 });
+                
+                operation.consumes.Add("application/form-data");
+            }
+            else if (operation.operationId.ToLower() == "job_addjobfile")
+            {
+                if (operation.parameters == null)
+                    operation.parameters = new List<Parameter>(3);
+                else
+                    operation.parameters.Clear();
+                operation.parameters.Add(new Parameter
+                {
+                    name = "File",
+                    @in = "formData",
+                    description = "Upload File",
+                    required = true,
+                    type = "file"
+                });
+                
+                operation.parameters.Add(new Parameter
+                {
+                    name = "JobId",
+                    @in = "formData",
+                    description = "Job Id",
+                    required = true,
+                    type = "string"
+                });
+
+                operation.parameters.Add(new Parameter
+                {
+                    name = "JobFileType",
+                    @in = "formData",
+                    description = "Job File Type",
+                    required = true,
+                    type = "string"
+                });
+               
                 operation.consumes.Add("application/form-data");
             }
         }
