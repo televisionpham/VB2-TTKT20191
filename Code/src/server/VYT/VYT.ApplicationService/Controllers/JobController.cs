@@ -26,6 +26,13 @@ namespace VYT.ApplicationService.Controllers
             return _uow.JobRepository.Get(id);
         }
 
+        [HttpGet]
+        [Route("api/Job/Total")]
+        public int GetTotal()
+        {
+            return _uow.JobRepository.GetTotal();
+        }
+
         public IEnumerable<VYT.Models.Job> GetPage(int pageIndex, int pageSize)
         {
             return _uow.JobRepository.GetPage(pageIndex, pageSize);
@@ -49,7 +56,7 @@ namespace VYT.ApplicationService.Controllers
         [ValidateMimeMultipartContentFilter]
         [HttpPost]
         [Route("api/Job/Create")]
-        public async Task<HttpResponseMessage> CreateJobFromFile()
+        public async Task<Models.Job> CreateJobFromFile()
         {            
             if (!Request.Content.IsMimeMultipartContent())
             {
@@ -65,11 +72,9 @@ namespace VYT.ApplicationService.Controllers
             var provider = new MultipartFormDataStreamProvider(uploadFolder);
 
             try
-            {
-                // Read the form data.
+            {                
                 await Request.Content.ReadAsMultipartAsync(provider);
-
-                // This illustrates how to get the file names.
+             
                 foreach (MultipartFileData file in provider.FileData)
                 {
                     _logger.Trace($"{"Server file path: " + file.LocalFileName}; File Name: {file.Headers.ContentDisposition.FileName}");                    
@@ -86,17 +91,18 @@ namespace VYT.ApplicationService.Controllers
                         Directory.CreateDirectory(fileStorage);
                     }
 
-                    var filePath = Path.Combine(fileStorage, $"{job.Id}_{job.Name}");
+                    var filePath = Path.Combine(fileStorage, $"{job.Id}_0_{job.Name}");
                     filePath = FileUtil.NextAvailableFilename(filePath);
                     File.Move(file.LocalFileName, filePath);
 
                     _uow.JobRepository.AddJobFile(job.Id, filePath, ResultTypeEnum.InputImage);
+                    return job;
                 }
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return null;
             }
             catch (System.Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                throw e;
             }
         }
 

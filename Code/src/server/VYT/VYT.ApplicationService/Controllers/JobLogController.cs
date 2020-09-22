@@ -25,5 +25,12 @@ namespace VYT.ApplicationService.Controllers
             var ret = _uow.JobLogRepository.Add(jobLog);
             return ret;
         }
+
+        [HttpGet]
+        [Route("api/JobLog/Total")]
+        public int GetTotal()
+        {
+            return _uow.JobLogRepository.GetTotal();
+        }
     }
 }

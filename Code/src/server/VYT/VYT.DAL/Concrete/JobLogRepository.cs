@@ -15,6 +15,11 @@ namespace VYT.DAL.Concrete
         {            
         }
 
+        public override int GetTotal()
+        {
+            return _dbContext.Set<Job>().Count();
+        }
+
         public override Models.JobLog Add(Models.JobLog entity)
         {
             var result = _dbContext.usp_JobLog_Add(entity.Name, entity.CreatedDate, (int)entity.State, entity.DocumentPages, entity.Duration.Ticks, entity.ProcessedDate, entity.Notes)

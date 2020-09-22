@@ -11,8 +11,7 @@ namespace VYT.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Languages { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public string InputFile { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;        
         public JobStateEnum State { get; set; }        
         public int DocumentPages { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.Zero;

@@ -15,6 +15,10 @@ namespace VYT.DAL.Concrete
         public JobRepository(DbContext dbContext) : base(dbContext)
         {
         }
+        public override int GetTotal()
+        {
+            return _dbContext.Set<JobLog>().Count();
+        }
 
         public override VYT.Models.Job Get(int id)
         {
