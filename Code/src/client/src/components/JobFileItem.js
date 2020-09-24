@@ -9,7 +9,7 @@ const JobFileItem = (props) => {
     }
 
     return (         
-        <li id={jobFile.id} key={jobFile.id}><a href={jobFile.FilePath} target="_blank">{icon} {jobFile.FileName}</a></li>
+        <li id={jobFile.id} key={jobFile.id}><a href={jobFile.FilePath} target="_blank" rel="noopener noreferrer">{icon} {jobFile.FileName}</a></li>
      );
 }
  

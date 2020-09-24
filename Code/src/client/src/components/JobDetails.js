@@ -28,13 +28,16 @@ class JobDetails extends Component {
         let jobState = '';
         switch (job.State) {
             case 0:
-                jobState = 'Đang chờ';
+                jobState = <span style={{color: 'orange'}}><i className="fa fa-clock-o fa-lg"></i></span>;
                 break;
             case 1:
-                jobState = 'Đang xử lý';
+                jobState = <span style={{color: 'blue'}}><i className="fa fa-cog fa-spin fa-lg"></i></span>;
                 break;
             case 2:
-                jobState = 'Đã xử lý';
+                jobState = <span style={{color: 'green'}}><i className="fa fa-check-circle fa-lg"></i></span>;
+                break;
+            case -1:
+                jobState = <span style={{color: 'red'}}><i className="fa fa-frown-o fa-lg"></i></span>;
                 break;
             default:
                 break;
