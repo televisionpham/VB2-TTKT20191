@@ -12,12 +12,12 @@ const UploadFileForm = () => {
     const [languages, setLanguages] = useState('vie');
 
     const handleSubmit = (e) => {
-        e.preventDefault();        
+        e.preventDefault();
         const data = new FormData();
         data.append('jobFile', jobFile);
-        data.append('languages', languages);        
+        data.append('languages', languages);
         axios.post('http://localhost/VYT.ApplicationService/api/Job/Create', data, {})
-            .then(res => {                
+            .then(res => {
                 if (res.status === 200) {
                     alert('Tải file thành công');
                 } else {
@@ -47,6 +47,7 @@ const UploadFileForm = () => {
                             </div>
                             <div className="col-sm-12 col-md-4">
                                 <input id="jobFile" type="file" className="form-control-file" name="jobFile"
+                                    accept=".tif, .tiff, .bmp, .png, .jpg"
                                     onChange={(e) => setJobFile(e.target.files[0])}
                                 />
                             </div>

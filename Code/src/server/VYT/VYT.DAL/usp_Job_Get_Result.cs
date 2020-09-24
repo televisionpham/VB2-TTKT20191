@@ -21,5 +21,6 @@ namespace VYT.DAL
         public Nullable<long> Duration { get; set; }
         public int DocumentPages { get; set; }
         public string Notes { get; set; }
+        public Nullable<System.DateTime> Processed { get; set; }
     }
 }

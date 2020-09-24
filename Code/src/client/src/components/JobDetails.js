@@ -10,6 +10,13 @@ class JobDetails extends Component {
     };
 
     componentDidMount() {
+        this.getJobFiles();
+        setInterval(() => {
+            this.getJobFiles();
+        }, 5000);
+    }
+
+    getJobFiles() {
         axios.get(`http://localhost/VYT.ApplicationService/api/Job/GetFiles?id=${this.props.job.Id}&type=-1`)
             .then(res => {
                 this.setState({ jobFiles: [...res.data] })
@@ -44,15 +51,18 @@ class JobDetails extends Component {
                 </td>
                 <td>{jobState}</td>
                 <td>
-                <ul>
+                    <ul>
                         {this.state.jobFiles.map(jobFile => {
                             return (
-                                <JobFileItem key={jobFile.Id} jobFile={jobFile}/>
+                                <JobFileItem key={jobFile.Id} jobFile={jobFile} />
                             )
                         })}
                     </ul>
                 </td>
-            </tr>            
+                <td>
+                    {job.Notes}
+                </td>
+            </tr>
         );
     }
 }

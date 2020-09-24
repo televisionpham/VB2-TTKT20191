@@ -146,19 +146,6 @@ namespace VYT.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_JobLog_GetPage_Result>("usp_JobLog_GetPage", pageIndexParameter, pageSizeParameter);
         }
     
-        public virtual ObjectResult<usp_Job_GetByState_Result> usp_Job_GetByState(Nullable<int> state, Nullable<int> limit)
-        {
-            var stateParameter = state.HasValue ?
-                new ObjectParameter("state", state) :
-                new ObjectParameter("state", typeof(int));
-    
-            var limitParameter = limit.HasValue ?
-                new ObjectParameter("limit", limit) :
-                new ObjectParameter("limit", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetByState_Result>("usp_Job_GetByState", stateParameter, limitParameter);
-        }
-    
         public virtual ObjectResult<usp_Job_AddFile_Result> usp_Job_AddFile(Nullable<int> jobId, Nullable<int> type, Nullable<long> fileSize, string fileType, string filePath)
         {
             var jobIdParameter = jobId.HasValue ?
@@ -184,16 +171,29 @@ namespace VYT.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_AddFile_Result>("usp_Job_AddFile", jobIdParameter, typeParameter, fileSizeParameter, fileTypeParameter, filePathParameter);
         }
     
-        public virtual ObjectResult<usp_Job_Get_Result1> usp_Job_Get(Nullable<int> jobId)
+        public virtual ObjectResult<usp_Job_Get_Result> usp_Job_Get(Nullable<int> jobId)
         {
             var jobIdParameter = jobId.HasValue ?
                 new ObjectParameter("jobId", jobId) :
                 new ObjectParameter("jobId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result1>("usp_Job_Get", jobIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result>("usp_Job_Get", jobIdParameter);
         }
     
-        public virtual ObjectResult<usp_Job_GetPage_Result1> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
+        public virtual ObjectResult<usp_Job_GetByState_Result> usp_Job_GetByState(Nullable<int> state, Nullable<int> limit)
+        {
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(int));
+    
+            var limitParameter = limit.HasValue ?
+                new ObjectParameter("limit", limit) :
+                new ObjectParameter("limit", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetByState_Result>("usp_Job_GetByState", stateParameter, limitParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_GetPage_Result> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
         {
             var pageIndexParameter = pageIndex.HasValue ?
                 new ObjectParameter("pageIndex", pageIndex) :
@@ -203,7 +203,7 @@ namespace VYT.DAL
                 new ObjectParameter("pageSize", pageSize) :
                 new ObjectParameter("pageSize", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result1>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
         }
     }
 }

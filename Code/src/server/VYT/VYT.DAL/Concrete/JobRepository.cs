@@ -151,7 +151,8 @@ namespace VYT.DAL.Concrete
                     Languages = item.Languages,
                     Name = item.Name,
                     Notes = item.Notes,
-                    State = (JobStateEnum)item.State
+                    State = (JobStateEnum)item.State,
+                    ProcessedDate = item.Processed
                 });
             }
             return jobs;

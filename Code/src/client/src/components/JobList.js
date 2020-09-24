@@ -12,6 +12,9 @@ class JobList extends Component {
 
     componentDidMount() {
         this.refresh();
+        setInterval(() => {
+            this.getJobPage();
+        }, 5000);
     };
 
     refresh() {
@@ -81,6 +84,7 @@ class JobList extends Component {
                             <th scope="col">Hoàn thành</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Files</th>
+                            <th scope="col">Ghi chú</th>
                         </tr>
                     </thead>
                     <tbody>

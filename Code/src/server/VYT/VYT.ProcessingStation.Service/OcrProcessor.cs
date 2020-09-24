@@ -62,12 +62,20 @@ namespace VYT.ProcessingStation.Service
                     var outputFile = output + ".pdf";
                     if (File.Exists(outputFile))
                     {
-                        job.Duration = DateTime.Now - startTime;
+                        var now = DateTime.Now;
+                        job.Duration = now - startTime;
                         job.DocumentPages = PdfUtil.GetTotalPages(outputFile);
                         var jobFile = _client.AddJobFile(job.Id, outputFile, ResultTypeEnum.OcrResult);
                         jobFile.Wait();
-                        job.State = JobStateEnum.Processed;                        
+                        job.State = JobStateEnum.Processed;
+                        job.ProcessedDate = now;
                         _client.UpdateJob(job).Wait();                    
+                    }
+                    else
+                    {
+                        job.State = JobStateEnum.Error;
+                        job.Notes = "Could not process input file";
+                        _client.UpdateJob(job).Wait();
                     }
                 }
                 finally
