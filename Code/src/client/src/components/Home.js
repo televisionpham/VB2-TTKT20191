@@ -5,7 +5,7 @@ import UploadFileForm from './UploadFileForm'
 const Home = () => {
     
     return (
-        <div className="container">
+        <div className="container-fluid">
             <br/>
             <UploadFileForm/>
             <br/>

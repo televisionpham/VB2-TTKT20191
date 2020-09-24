@@ -44,7 +44,7 @@ namespace VYT.ProcessingStation.Service
                 _process.EnableRaisingEvents = true;
                 _process.Exited += Process_Exited;
                 _process.StartInfo.FileName = execFile;
-                _process.StartInfo.Arguments = $"{input} {output} -l {job.Languages} pdf";
+                _process.StartInfo.Arguments = $"{input} {output} -l {job.Languages} --psm 1 pdf";
                 _process.StartInfo.RedirectStandardOutput = true;
                 _process.StartInfo.RedirectStandardError = true;
                 _process.StartInfo.UseShellExecute = false;

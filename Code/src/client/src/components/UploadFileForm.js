@@ -33,7 +33,7 @@ const UploadFileForm = () => {
         <div id="uploadFileForm">
             <div className="card">
                 <div className="card-body">
-                    <h4 className="card-title">Số hóa file</h4>
+                    <h4 className="card-title">Số hóa</h4>
                     <form onSubmit={handleSubmit}>
                         <div className="row">
                             <div className="col-sm-12 col-md-5">
