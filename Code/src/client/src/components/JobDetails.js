@@ -44,8 +44,7 @@ class JobDetails extends Component {
         }
         return (
             <tr>
-                <td>{job.Name}</td>
-                <td>{job.Languages}</td>
+                <td>{job.Name}</td>                
                 <td>{moment(job.CreatedDate).format('DD/MM/YYYY h:mm:ss')}</td>
                 <td>{job.DocumentPages}</td>
                 <td>{job.Duration}</td>

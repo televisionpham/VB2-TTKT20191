@@ -5,7 +5,10 @@ import Select from 'react-select'
 const UploadFileForm = () => {
     const options = [
         { value: 'vie', label: 'Tiếng Việt' },
-        { value: 'en', label: 'English' }
+        { value: 'en', label: 'Tiếng Anh' },
+        { value: 'fra', label: 'Tiếng Pháp' },
+        { value: 'deu', label: 'Tiếng Đức' },
+        { value: 'rus', label: 'Tiếng Nga' },
     ]
 
     const [jobFile, setJobFile] = useState('');

@@ -1,4 +1,5 @@
 import React from 'react'
+import Footer from './Footer'
 import JobList from './JobList'
 import UploadFileForm from './UploadFileForm'
 
@@ -10,6 +11,7 @@ const Home = () => {
             <UploadFileForm/>
             <br/>
             <JobList/>
+            <Footer/>
         </div>
     )
 }
