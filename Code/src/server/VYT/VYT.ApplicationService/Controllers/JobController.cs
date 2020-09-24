@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using VYT.ApplicationService.Helpers;
 using VYT.DAL;
 using VYT.DAL.Abstract;
@@ -15,6 +16,7 @@ using VYT.Models;
 
 namespace VYT.ApplicationService.Controllers
 {
+    [EnableCors(origins:"http://localhost:3001", headers: "*", methods: "*")]
     public class JobController : ApiController
     {
         private const string FILE_STORAGE = "~/FileStorage";
@@ -90,7 +92,7 @@ namespace VYT.ApplicationService.Controllers
                         var job = _uow.JobRepository.Add(new VYT.Models.Job()
                         {
                             Name = file.Headers.ContentDisposition.FileName.Trim('"'),
-                            Languages = provider.FormData["Languages"]
+                            Languages = provider.FormData["languages"]
                         });
 
                         var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), job.Id.ToString());
@@ -146,14 +148,14 @@ namespace VYT.ApplicationService.Controllers
                 {                    
                     try
                     {
-                        var jobId = provider.FormData["JobId"];
+                        var jobId = provider.FormData["jobId"];
                         var job = _uow.JobRepository.Get(int.Parse(jobId));
                         if (job == null)
                         {
                             throw new Exception($"Không tìm thấy job ID: {jobId}");
                         }
 
-                        var type = provider.FormData["JobFileType"];
+                        var type = provider.FormData["jobFileType"];
                         var fileStorage = Path.Combine(HttpContext.Current.Server.MapPath(FILE_STORAGE), jobId);
                         if (!Directory.Exists(fileStorage))
                         {

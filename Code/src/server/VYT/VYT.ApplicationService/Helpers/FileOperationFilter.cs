@@ -19,7 +19,7 @@ namespace VYT.ApplicationService.Helpers
                     operation.parameters.Clear();
                 operation.parameters.Add(new Parameter
                 {
-                    name = "File",
+                    name = "jobFile",
                     @in = "formData",
                     description = "Upload File",
                     required = true,
@@ -28,7 +28,7 @@ namespace VYT.ApplicationService.Helpers
                 
                 operation.parameters.Add(new Parameter
                 {
-                    name = "Languages",
+                    name = "languages",
                     @in = "formData",
                     description = "OCR Languages",
                     required = true,
@@ -45,7 +45,7 @@ namespace VYT.ApplicationService.Helpers
                     operation.parameters.Clear();
                 operation.parameters.Add(new Parameter
                 {
-                    name = "File",
+                    name = "jobFile",
                     @in = "formData",
                     description = "Upload File",
                     required = true,
@@ -54,7 +54,7 @@ namespace VYT.ApplicationService.Helpers
                 
                 operation.parameters.Add(new Parameter
                 {
-                    name = "JobId",
+                    name = "jobId",
                     @in = "formData",
                     description = "Job Id",
                     required = true,
@@ -63,7 +63,7 @@ namespace VYT.ApplicationService.Helpers
 
                 operation.parameters.Add(new Parameter
                 {
-                    name = "JobFileType",
+                    name = "jobFileType",
                     @in = "formData",
                     description = "Job File Type",
                     required = true,

@@ -44,28 +44,6 @@ namespace VYT.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Add_Result>("usp_Job_Add", nameParameter, languagesParameter);
         }
     
-        public virtual ObjectResult<usp_Job_Get_Result> usp_Job_Get(Nullable<int> jobId)
-        {
-            var jobIdParameter = jobId.HasValue ?
-                new ObjectParameter("jobId", jobId) :
-                new ObjectParameter("jobId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result>("usp_Job_Get", jobIdParameter);
-        }
-    
-        public virtual ObjectResult<usp_Job_GetPage_Result> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
-        {
-            var pageIndexParameter = pageIndex.HasValue ?
-                new ObjectParameter("pageIndex", pageIndex) :
-                new ObjectParameter("pageIndex", typeof(int));
-    
-            var pageSizeParameter = pageSize.HasValue ?
-                new ObjectParameter("pageSize", pageSize) :
-                new ObjectParameter("pageSize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
-        }
-    
         public virtual ObjectResult<Nullable<int>> usp_Job_GetTotal()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("usp_Job_GetTotal");
@@ -80,7 +58,7 @@ namespace VYT.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_Delete", jobIdParameter);
         }
     
-        public virtual int usp_Job_Update(Nullable<int> id, Nullable<int> state, Nullable<long> duration, string notes, Nullable<int> documentPages)
+        public virtual int usp_Job_Update(Nullable<int> id, Nullable<int> state, Nullable<long> duration, string notes, Nullable<int> documentPages, Nullable<System.DateTime> processed)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("id", id) :
@@ -102,7 +80,11 @@ namespace VYT.DAL
                 new ObjectParameter("documentPages", documentPages) :
                 new ObjectParameter("documentPages", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_Update", idParameter, stateParameter, durationParameter, notesParameter, documentPagesParameter);
+            var processedParameter = processed.HasValue ?
+                new ObjectParameter("processed", processed) :
+                new ObjectParameter("processed", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Job_Update", idParameter, stateParameter, durationParameter, notesParameter, documentPagesParameter, processedParameter);
         }
     
         public virtual ObjectResult<usp_Job_GetFile_Result> usp_Job_GetFile(Nullable<int> jobId, Nullable<int> type)
@@ -200,6 +182,28 @@ namespace VYT.DAL
                 new ObjectParameter("filePath", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_AddFile_Result>("usp_Job_AddFile", jobIdParameter, typeParameter, fileSizeParameter, fileTypeParameter, filePathParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_Get_Result1> usp_Job_Get(Nullable<int> jobId)
+        {
+            var jobIdParameter = jobId.HasValue ?
+                new ObjectParameter("jobId", jobId) :
+                new ObjectParameter("jobId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result1>("usp_Job_Get", jobIdParameter);
+        }
+    
+        public virtual ObjectResult<usp_Job_GetPage_Result1> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
+        {
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("pageIndex", pageIndex) :
+                new ObjectParameter("pageIndex", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result1>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
         }
     }
 }

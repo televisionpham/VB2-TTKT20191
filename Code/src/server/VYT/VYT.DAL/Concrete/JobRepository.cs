@@ -17,7 +17,7 @@ namespace VYT.DAL.Concrete
         }
         public override int GetTotal()
         {
-            return _dbContext.Set<JobLog>().Count();
+            return _dbContext.Set<Job>().Count();
         }
 
         public override VYT.Models.Job Get(int id)
@@ -34,7 +34,8 @@ namespace VYT.DAL.Concrete
                     Duration = result.Duration.HasValue ? TimeSpan.FromTicks(result.Duration.Value) : TimeSpan.Zero,
                     Languages = result.Languages,
                     Notes = result.Notes,
-                    State = (JobStateEnum)result.State
+                    State = (JobStateEnum)result.State,
+                    ProcessedDate = result.Processed
                 };
             }
             else
@@ -47,18 +48,19 @@ namespace VYT.DAL.Concrete
         {
             var jobs = new List<VYT.Models.Job>();
             var results = _dbContext.usp_Job_GetPage(pageIndex - 1, pageSize);
-            foreach (var j in results)
+            foreach (var result in results)
             {
                 var job = new VYT.Models.Job
                 {
-                    Id = j.Id,
-                    Name = j.Name,
-                    CreatedDate = j.Created,
-                    DocumentPages = j.DocumentPages,
-                    Duration = j.Duration.HasValue ? TimeSpan.FromTicks(j.Duration.Value) : TimeSpan.Zero,
-                    Languages = j.Languages,
-                    Notes = j.Notes,
-                    State = (JobStateEnum)j.State
+                    Id = result.Id,
+                    Name = result.Name,
+                    CreatedDate = result.Created,
+                    DocumentPages = result.DocumentPages,
+                    Duration = result.Duration.HasValue ? TimeSpan.FromTicks(result.Duration.Value) : TimeSpan.Zero,
+                    Languages = result.Languages,
+                    Notes = result.Notes,
+                    State = (JobStateEnum)result.State,
+                    ProcessedDate = result.Processed
                 };
                 jobs.Add(job);
             }
@@ -83,7 +85,7 @@ namespace VYT.DAL.Concrete
 
         public override void Update(VYT.Models.Job entity)
         {
-            _dbContext.usp_Job_Update(entity.Id, (int)entity.State, entity.Duration.Ticks, entity.Notes, entity.DocumentPages);
+            _dbContext.usp_Job_Update(entity.Id, (int)entity.State, entity.Duration.Ticks, entity.Notes, entity.DocumentPages, entity.ProcessedDate);
         }
 
         public JobFile AddJobFile(int jobId, string filePath, ResultTypeEnum type)
@@ -120,7 +122,8 @@ namespace VYT.DAL.Concrete
                 {
                     var jobFile = new JobFile()
                     {
-                        FileName = job.Name,
+                        Id = item.Id,
+                        FileName = Path.GetFileName(item.FilePath),
                         FileExtension = item.FileType,
                         FilePath = item.FilePath,
                         FileSize = item.FileSize.HasValue ? item.FileSize.Value : 0,

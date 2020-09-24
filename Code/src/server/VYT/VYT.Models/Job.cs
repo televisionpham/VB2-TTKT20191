@@ -15,6 +15,7 @@ namespace VYT.Models
         public JobStateEnum State { get; set; }        
         public int DocumentPages { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.Zero;
-        public string Notes { get; set; }        
+        public string Notes { get; set; } 
+        public DateTime? ProcessedDate { get; set; }
     }
 }

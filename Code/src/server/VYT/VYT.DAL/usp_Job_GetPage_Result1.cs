@@ -10,16 +10,9 @@
 namespace VYT.DAL
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Job
+    public partial class usp_Job_GetPage_Result1
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Job()
-        {
-            this.FileStorages = new HashSet<FileStorage>();
-        }
-    
         public int Id { get; set; }
         public string Name { get; set; }
         public System.DateTime Created { get; set; }
@@ -29,8 +22,5 @@ namespace VYT.DAL
         public string Notes { get; set; }
         public int DocumentPages { get; set; }
         public Nullable<System.DateTime> Processed { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FileStorage> FileStorages { get; set; }
     }
 }

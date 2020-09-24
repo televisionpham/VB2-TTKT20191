@@ -29,6 +29,7 @@
           <Property Name="Duration" Type="bigint" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="DocumentPages" Type="int" Nullable="false" />
+          <Property Name="Processed" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="JobLog">
           <Key>
@@ -92,6 +93,7 @@
           <Parameter Name="duration" Type="bigint" Mode="In" />
           <Parameter Name="notes" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="documentPages" Type="int" Mode="In" />
+          <Parameter Name="processed" Type="datetime2" Mode="In" />
         </Function>
         <Function Name="usp_JobLog_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name" Type="nvarchar" Mode="In" />
@@ -145,6 +147,7 @@
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DocumentPages" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FileStorages" Relationship="Self.FK_FileStorage_Job" FromRole="Job" ToRole="FileStorage" />
+          <Property Name="Processed" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="JobLog">
           <Key>
@@ -185,13 +188,6 @@
             <Parameter Name="name" Mode="In" Type="String" />
             <Parameter Name="languages" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="usp_Job_Get" ReturnType="Collection(VYT_TTKTModel.usp_Job_Get_Result)">
-          <Parameter Name="jobId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="usp_Job_GetPage" ReturnType="Collection(VYT_TTKTModel.usp_Job_GetPage_Result)">
-            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
-            <Parameter Name="pageSize" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="usp_Job_GetTotal" ReturnType="Collection(Int32)" />
           <FunctionImport Name="usp_Job_Delete">
           <Parameter Name="jobId" Mode="In" Type="Int32" />
@@ -202,6 +198,7 @@
             <Parameter Name="duration" Mode="In" Type="Int64" />
             <Parameter Name="notes" Mode="In" Type="String" />
             <Parameter Name="documentPages" Mode="In" Type="Int32" />
+            <Parameter Name="processed" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="usp_Job_GetFile" ReturnType="Collection(VYT_TTKTModel.usp_Job_GetFile_Result)">
             <Parameter Name="jobId" Mode="In" Type="Int32" />
@@ -230,6 +227,13 @@
             <Parameter Name="fileSize" Mode="In" Type="Int64" />
             <Parameter Name="fileType" Mode="In" Type="String" />
             <Parameter Name="filePath" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_Get" ReturnType="Collection(VYT_TTKTModel.usp_Job_Get_Result1)">
+            <Parameter Name="jobId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Job_GetPage" ReturnType="Collection(VYT_TTKTModel.usp_Job_GetPage_Result1)">
+            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="usp_Job_Add_Result">
@@ -310,6 +314,28 @@
           <Property Type="String" Name="FilePath" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="FileType" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <ComplexType Name="usp_Job_Get_Result1">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="String" Name="Languages" Nullable="false" MaxLength="250" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="DateTime" Name="Processed" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_Job_GetPage_Result1">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Created" Nullable="false" />
+          <Property Type="Int32" Name="State" Nullable="false" />
+          <Property Type="String" Name="Languages" Nullable="false" MaxLength="250" />
+          <Property Type="Int64" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" />
+          <Property Type="Int32" Name="DocumentPages" Nullable="false" />
+          <Property Type="DateTime" Name="Processed" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -332,6 +358,7 @@
           <EntitySetMapping Name="Jobs">
             <EntityTypeMapping TypeName="VYT_TTKTModel.Job">
               <MappingFragment StoreEntitySet="Job">
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
@@ -360,34 +387,6 @@
           <FunctionImportMapping FunctionImportName="usp_Job_Add" FunctionName="VYT_TTKTModel.Store.usp_Job_Add">
             <ResultMapping>
               <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_Add_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Languages" ColumnName="Languages" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
-                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="usp_Job_Get" FunctionName="VYT_TTKTModel.Store.usp_Job_Get">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_Get_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Languages" ColumnName="Languages" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="usp_Job_GetPage" FunctionName="VYT_TTKTModel.Store.usp_Job_GetPage">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_GetPage_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
@@ -466,6 +465,36 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="FileType" ColumnName="FileType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_Get" FunctionName="VYT_TTKTModel.Store.usp_Job_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_Get_Result1">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Job_GetPage" FunctionName="VYT_TTKTModel.Store.usp_Job_GetPage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VYT_TTKTModel.usp_Job_GetPage_Result1">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="DocumentPages" ColumnName="DocumentPages" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -93,7 +93,13 @@
     <Compile Include="usp_Job_GetPage_Result.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="usp_Job_GetPage_Result1.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="usp_Job_Get_Result.cs">
+      <DependentUpon>VYTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Job_Get_Result1.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="VYTModel.Context.cs">
