@@ -7,7 +7,7 @@ class JobList extends Component {
         jobs: [],
         totalJobs: 0,
         pageIndex: 1,
-        pageSize: 50
+        pageSize: 10
     }
 
     componentDidMount() {
@@ -66,9 +66,9 @@ class JobList extends Component {
                     <span>Hiển thị </span>
                     <select id="pageSize" onChange={(e) => this.handleChangePageSize(e)}>
                         <option value="5">5</option>
-                        <option value="10">10</option>
+                        <option value="10" selected>10</option>
                         <option value="25">25</option>
-                        <option value="50" selected>50</option>
+                        <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
                     <span> kết quả / 1 trang</span>
