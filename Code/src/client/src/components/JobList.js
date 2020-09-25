@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import JobDetails from './JobDetails'
 
-class JobList extends Component {
+class JobList extends Component {    
     state = {
         jobs: [],
         totalJobs: 0,
@@ -13,7 +13,7 @@ class JobList extends Component {
     componentDidMount() {
         this.refresh();
         setInterval(() => {
-            this.getJobPage();
+            this.getJobPage(this.state.pageIndex, this.state.pageSize);
         }, 5000);
     };
 
@@ -25,12 +25,12 @@ class JobList extends Component {
         this.setState({
             pageIndex: 1,
         }, () => {
-            this.getJobPage();
+            this.getJobPage(this.state.pageIndex, this.state.pageSize);
         })
     }
 
-    getJobPage() {
-        axios.get(`http://localhost/VYT.ApplicationService/api/Job?pageIndex=${this.state.pageIndex}&pageSize=${this.state.pageSize}`)
+    getJobPage(pageIndex, pageSize) {
+        axios.get(`http://localhost/VYT.ApplicationService/api/Job?pageIndex=${pageIndex}&pageSize=${pageSize}`)
             .then(res => {
                 this.setState({ jobs: res.data });
             });
@@ -38,7 +38,7 @@ class JobList extends Component {
 
     changePageIndex(pageIndex) {
         this.setState({ pageIndex }, () => {
-            this.getJobPage();
+            this.getJobPage(this.state.pageIndex, this.state.pageSize);
         });
     }
 
@@ -46,7 +46,7 @@ class JobList extends Component {
         this.setState({ pageSize: e.target.value }, () => {
             this.refresh();
         });
-    }
+    }    
 
     render() {
         const totalPages = Math.ceil(this.state.totalJobs / this.state.pageSize);
@@ -80,14 +80,17 @@ class JobList extends Component {
                             <th scope="col">Thời gian tạo</th>
                             <th scope="col">Số trang</th>
                             <th scope="col">Thời gian xử lý</th>
-                            <th scope="col">Hoàn thành</th>                            
+                            <th scope="col">Hoàn thành</th>
                             <th scope="col">Files</th>
                             <th scope="col">Thao tác</th>
-                            <th scope="col">Ghi chú</th>                            
+                            <th scope="col">Ghi chú</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.jobs.map(job => <JobDetails job={job} key={job.Id} />)}
+                        {
+                            this.state.jobs.map(job => <JobDetails job={job} key={job.Id}                                
+                            />)
+                        }
                     </tbody>
                 </table>
                 <nav>

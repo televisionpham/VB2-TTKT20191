@@ -2,18 +2,28 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import moment from 'moment'
 import JobFileItem from './JobFileItem';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
-class JobDetails extends Component {
+class JobDetails extends Component {    
+    
+    _isMounted = false;
     state = {
-        jobFiles: [],
-        job: this.props
+        jobFiles: [],        
     };
 
     componentDidMount() {
+        this._isMounted = true;
         this.getJobFiles();
         setInterval(() => {
-            this.getJobFiles();
+            if (this._isMounted) {
+                this.getJobFiles();
+            }
         }, 5000);
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;        
     }
 
     getJobFiles() {
@@ -23,15 +33,68 @@ class JobDetails extends Component {
             });
     }
 
-    deleteJob(jobId) {
-        console.log(jobId);
+    redoJob() {
+        
+        const options = {
+            title: 'Số hóa lại',
+            message: 'Bạn chắc chắn muốn số hóa lại tài liệu?',
+            buttons: [
+                {
+                    label: 'Có',
+                    onClick: () => {
+                        this.props.job.State = 0;
+                        axios.put(`http://localhost/VYT.ApplicationService/api/Job/`, this.props.job)
+                            .then(res => {                                
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                alert(err);
+                            });
+                    }
+                },
+                {
+                    label: 'Không',
+                    onClick: () => {
+
+                    }
+                }
+            ],
+        }
+
+        confirmAlert(options);
     }
 
-    redoJob(jobId) {
+    deleteJob(jobId) {
+        const options = {
+            title: 'Xóa tài liệu',
+            message: 'Bạn chắc chắn muốn xóa tài liệu?',
+            buttons: [
+                {
+                    label: 'Có',
+                    onClick: () => {
+                        axios.delete(`http://localhost/VYT.ApplicationService/api/Job/${jobId}`)
+                            .then(res => {
+                                
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                alert(err);
+                            });
+                    }
+                },
+                {
+                    label: 'Không',
+                    onClick: () => {
 
-    }     
+                    }
+                }
+            ],
+        }
 
-    render() {
+        confirmAlert(options);
+    }
+
+    render() {        
         const { job } = this.props;
         let jobState = '';
         switch (job.State) {
@@ -69,7 +132,7 @@ class JobDetails extends Component {
                     </ul>
                 </td>
                 <td>
-                    <span className="text-primary" onClick={() => this.redoJob(job.Id)}><i className="fa fa-repeat fa-lg"></i> </span>
+                    <span className="text-primary" onClick={() => this.redoJob()}><i className="fa fa-repeat fa-lg"></i> </span>
                     <span className="text-danger" onClick={() => this.deleteJob(job.Id)}><i className="fa fa-trash fa-lg"></i></span>
                 </td>
                 <td>
