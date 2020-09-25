@@ -62,35 +62,16 @@ class JobList extends Component {
         return (
             <div id="jobList">
                 <h4>Danh sách tài liệu ({this.state.totalJobs})</h4>
-                <div className="row" style={{marginBottom: '8px'}}>
-                    <div className="col-sm-12 col-md-6">
-                        <nav>
-                            <ul className="pagination">
-                                {this.state.pageIndex <= totalPages && this.state.pageIndex > 1 ?
-                                    <li className="page-item" style={{ cursor: 'pointer' }}><span className="page-link" onClick={() => this.changePageIndex(this.state.pageIndex - 1)}>&laquo;</span></li> :
-                                    <li className="page-item disabled"><span className="page-link">&laquo;</span></li>
-                                }
-                                {pages}
-                                {this.state.pageIndex < totalPages ?
-                                    <li className="page-item" style={{ cursor: 'pointer' }}><span className="page-link" onClick={() => this.changePageIndex(this.state.pageIndex + 1)}>&raquo;</span></li> :
-                                    <li className="page-item disabled"><span className="page-link">&raquo;</span></li>
-                                }
-                            </ul>
-                        </nav>
-                    </div>
-                    <div className="col-sm-12 col-md-6" style={{textAlign: 'right'}}>
-                        <div style={{ marginBottom: '8px' }}>
-                            <span>Hiển thị </span>
-                            <select id="pageSize" onChange={(e) => this.handleChangePageSize(e)}>
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            <span> kết quả / 1 trang</span>
-                        </div>
-                    </div>
+                <div style={{ marginBottom: '8px' }}>
+                    <span>Hiển thị </span>
+                    <select id="pageSize" defaultValue="10" onChange={(e) => this.handleChangePageSize(e)}>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span> kết quả / 1 trang</span>
                 </div>
                 <table className="table">
                     <thead>

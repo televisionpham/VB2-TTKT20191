@@ -52,6 +52,7 @@ namespace VYT.ProcessingStation.Service
             try
             {
                 OcrStation.Load();
+                OcrStation.Save();
                 FileUtil.DeleteFolder(OcrStation.TempFolder);
                 JobManager.Start();
                 ProcessManager.Start();

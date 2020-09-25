@@ -11,25 +11,31 @@ const UploadFileForm = () => {
         { value: 'rus', label: 'Tiếng Nga' },
     ]
 
-    const [jobFile, setJobFile] = useState('');
+    const [jobFiles, setJobFile] = useState([]);
     const [languages, setLanguages] = useState('vie');
+    const [message, setMessage] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('jobFile', jobFile);
-        data.append('languages', languages);
-        axios.post('http://localhost/VYT.ApplicationService/api/Job/Create', data, {})
-            .then(res => {
-                if (res.status === 200) {
-                    alert('Tải file thành công');
-                } else {
-                    alert(res.statusText);
-                }
-            })
-            .catch(err => {
-                alert(err);
-            });
+        console.log(jobFiles);
+        for (let i = 0; i < jobFiles.length; i++) {
+            const jobFile = jobFiles[i];
+            let data = new FormData();
+            data.append('jobFile', jobFile);
+            data.append('languages', languages);
+            axios.post('http://localhost/VYT.ApplicationService/api/Job/Create', data, {})
+                .then(res => {
+                    if (res.status === 200) {
+                        setMessage('Tải thành công file: ' + jobFile.name);
+                        console.log(message);
+                    } else {
+                        alert(res.statusText);
+                    }
+                })
+                .catch(err => {
+                    alert(err);
+                });
+        }        
     }
 
     return (
@@ -48,11 +54,14 @@ const UploadFileForm = () => {
                                     onChange={(e) => setLanguages(e.map(x => x.value).join('+'))}
                                 />
                             </div>
-                            <div className="col-sm-12 col-md-4">
-                                <input id="jobFile" type="file" className="form-control-file" name="jobFile"
+                            <div className="col-sm-12 col-md-3">
+                                <input id="jobFile" type="file" multiple className="form-control-file" name="jobFile"
                                     accept=".tif, .tiff, .bmp, .png, .jpg"
-                                    onChange={(e) => setJobFile(e.target.files[0])}
+                                    onChange={(e) => setJobFile(e.target.files)}
                                 />
+                            </div>
+                            <div className="col-sm-12 col-md-4">
+                                {message}
                             </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Tải lên</button>

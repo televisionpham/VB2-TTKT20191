@@ -80,7 +80,7 @@ namespace VYT.ProcessingStation.Service
                             var inputFile = Path.Combine(jobFolder, job.Id + Path.GetExtension(job.Name));
                             FileUtil.DeleteFile(inputFile);
                             _client.DownloadFile(jobFiles.Result.FirstOrDefault().FilePath, inputFile).Wait();
-                            freeProcess.ProcessJob(job, inputFile);
+                            Task.Run(() => freeProcess.ProcessJob(job, inputFile));
                         }
                         catch (Exception ex)
                         {
