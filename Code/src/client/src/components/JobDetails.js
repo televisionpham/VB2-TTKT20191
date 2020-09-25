@@ -23,35 +23,42 @@ class JobDetails extends Component {
             });
     }
 
+    deleteJob(jobId) {
+        console.log(jobId);
+    }
+
+    redoJob(jobId) {
+
+    }     
+
     render() {
         const { job } = this.props;
         let jobState = '';
         switch (job.State) {
             case 0:
-                jobState = <span style={{color: 'orange'}}><i className="fa fa-clock-o fa-lg"></i></span>;
+                jobState = <span className="text-warning"><i className="fa fa-clock-o fa-lg"></i></span>;
                 break;
             case 1:
-                jobState = <span style={{color: 'blue'}}><i className="fa fa-cog fa-spin fa-lg"></i></span>;
+                jobState = <span className="text-primary"><i className="fa fa-cog fa-spin fa-lg"></i></span>;
                 break;
             case 2:
-                jobState = <span style={{color: 'green'}}><i className="fa fa-check-circle fa-lg"></i></span>;
+                jobState = <span className="text-success"><i className="fa fa-check-circle fa-lg"></i></span>;
                 break;
             case -1:
-                jobState = <span style={{color: 'red'}}><i className="fa fa-frown-o fa-lg"></i></span>;
+                jobState = <span className="text-danger"><i className="fa fa-frown-o fa-lg"></i></span>;
                 break;
             default:
                 break;
         }
         return (
             <tr>
-                <td>{job.Name}</td>                
+                <td>{jobState} {job.Name}</td>
                 <td>{moment(job.CreatedDate).format('DD/MM/YYYY h:mm:ss')}</td>
                 <td>{job.DocumentPages}</td>
                 <td>{job.Duration}</td>
                 <td>
                     {job.ProcessedDate ? moment(job.ProcessedDate).format('DD/MM/YYYY h:mm:ss') : ''}
                 </td>
-                <td>{jobState}</td>
                 <td>
                     <ul>
                         {this.state.jobFiles.map(jobFile => {
@@ -60,6 +67,10 @@ class JobDetails extends Component {
                             )
                         })}
                     </ul>
+                </td>
+                <td>
+                    <span className="text-primary" onClick={() => this.redoJob(job.Id)}><i className="fa fa-repeat fa-lg"></i> </span>
+                    <span className="text-danger" onClick={() => this.deleteJob(job.Id)}><i className="fa fa-trash fa-lg"></i></span>
                 </td>
                 <td>
                     {job.Notes}

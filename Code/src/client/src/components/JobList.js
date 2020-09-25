@@ -80,10 +80,10 @@ class JobList extends Component {
                             <th scope="col">Thời gian tạo</th>
                             <th scope="col">Số trang</th>
                             <th scope="col">Thời gian xử lý</th>
-                            <th scope="col">Hoàn thành</th>
-                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Hoàn thành</th>                            
                             <th scope="col">Files</th>
-                            <th scope="col">Ghi chú</th>
+                            <th scope="col">Thao tác</th>
+                            <th scope="col">Ghi chú</th>                            
                         </tr>
                     </thead>
                     <tbody>
