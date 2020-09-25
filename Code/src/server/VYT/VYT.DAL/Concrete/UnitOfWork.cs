@@ -16,8 +16,6 @@ namespace VYT.DAL.Concrete
         {
             this._dbContext = dbContext;
         }
-        public IJobRepository JobRepository => new JobRepository(_dbContext);
-
-        public IJobLogRepository JobLogRepository => new JobLogRepository(_dbContext);
+        public IJobRepository JobRepository => new JobRepository(_dbContext);        
     }
 }

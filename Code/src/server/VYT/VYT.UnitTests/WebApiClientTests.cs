@@ -17,34 +17,7 @@ namespace VYT.UnitTests
             resp.Wait();
             Assert.IsNotNull(resp.Result);
             Assert.AreEqual(9, resp.Result.Id);
-        }
-
-        [TestMethod]
-        public void Can_get_job_log_page()
-        {
-            var resp = _client.GetJobLogPage(1, 10);
-            resp.Wait();
-            Assert.IsTrue(resp.Result.Count() > 0);
-        }
-
-        [TestMethod]
-        public void Can_add_jog_log()
-        {
-            var jobLog = new Models.JobLog
-            {
-                CreatedDate = DateTime.Now,
-                DocumentPages = 0,
-                Duration = TimeSpan.Zero,
-                Name = "Test",
-                State = Models.JobStateEnum.Processed,
-                ProcessedDate = DateTime.Now,
-                Notes = "Some notes"
-            };
-            var resp = _client.AddJobLog(jobLog);
-            resp.Wait();
-            Assert.IsTrue(resp.Result.Id > 0);
-            Assert.AreEqual("Test", resp.Result.Name);
-        }
+        }       
 
         [TestMethod]
         public void Can_get_job_files()
@@ -82,14 +55,6 @@ namespace VYT.UnitTests
         public void Can_get_total_jobs()
         {
             var resp = _client.GetTotalJobs();
-            resp.Wait();
-            Assert.IsTrue(resp.Result > 0);
-        }
-
-        [TestMethod]
-        public void Can_get_total_job_logs()
-        {
-            var resp = _client.GetTotalJobLogs();
             resp.Wait();
             Assert.IsTrue(resp.Result > 0);
         }

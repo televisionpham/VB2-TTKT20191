@@ -7,7 +7,6 @@
       <Diagram DiagramId="e3432cbb11154647bf2772184e0c688d" Name="Diagram1">
         <EntityTypeShape EntityType="VYT_TTKTModel.FileStorage" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="VYT_TTKTModel.Job" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="VYT_TTKTModel.JobLog" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="VYT_TTKTModel.FK_FileStorage_Job" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

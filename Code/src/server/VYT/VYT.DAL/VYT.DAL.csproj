@@ -53,11 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IJobLogRepository.cs" />
     <Compile Include="Abstract\IJobRepository.cs" />
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Abstract\IUnitOfWork.cs" />
-    <Compile Include="Concrete\JobLogRepository.cs" />
     <Compile Include="Concrete\JobRepository.cs" />
     <Compile Include="Concrete\Repository.cs" />
     <Compile Include="Concrete\UnitOfWork.cs" />
@@ -66,9 +64,6 @@
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Job.cs">
-      <DependentUpon>VYTModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="JobLog.cs">
       <DependentUpon>VYTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

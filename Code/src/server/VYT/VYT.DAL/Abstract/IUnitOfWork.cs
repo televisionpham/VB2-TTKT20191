@@ -8,7 +8,6 @@ namespace VYT.DAL.Abstract
 {
     public interface IUnitOfWork
     {
-        IJobRepository JobRepository { get; }
-        IJobLogRepository JobLogRepository { get; }
+        IJobRepository JobRepository { get; }        
     }
 }

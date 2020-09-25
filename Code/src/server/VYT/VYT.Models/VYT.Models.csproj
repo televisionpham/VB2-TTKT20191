@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="JobFile.cs" />
-    <Compile Include="JobLog.cs" />
     <Compile Include="JobStateEnum.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="ObjectSerializer.cs" />

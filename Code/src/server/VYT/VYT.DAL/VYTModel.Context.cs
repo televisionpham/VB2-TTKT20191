@@ -29,7 +29,6 @@ namespace VYT.DAL
     
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
-        public virtual DbSet<JobLog> JobLogs { get; set; }
     
         public virtual ObjectResult<usp_Job_Add_Result> usp_Job_Add(string name, string languages)
         {
