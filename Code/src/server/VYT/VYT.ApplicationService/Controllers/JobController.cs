@@ -16,7 +16,7 @@ using VYT.Models;
 
 namespace VYT.ApplicationService.Controllers
 {
-    [EnableCors(origins:"http://localhost:3001", headers: "*", methods: "*")]
+    [EnableCors(origins:"http://localhost:3000", headers: "*", methods: "*")]
     public class JobController : ApiController
     {
         private const string FILE_STORAGE = "~/FileStorage";

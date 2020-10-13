@@ -18,7 +18,7 @@ class JobList extends Component {
     };
 
     refresh() {
-        axios.get(`http://localhost/VYT.ApplicationService/api/Job/Total`)
+        axios.get(`http://localhost:24151/api/Job/Total`)
             .then(res => {
                 this.setState({ totalJobs: res.data });
             });
@@ -30,7 +30,7 @@ class JobList extends Component {
     }
 
     getJobPage(pageIndex, pageSize) {
-        axios.get(`http://localhost/VYT.ApplicationService/api/Job?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+        axios.get(`http://localhost:24151/api/Job?pageIndex=${pageIndex}&pageSize=${pageSize}`)
             .then(res => {
                 this.setState({ jobs: res.data });
             });

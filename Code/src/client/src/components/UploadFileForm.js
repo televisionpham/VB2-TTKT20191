@@ -23,7 +23,7 @@ const UploadFileForm = () => {
             let data = new FormData();
             data.append('jobFile', jobFile);
             data.append('languages', languages);
-            axios.post('http://localhost/VYT.ApplicationService/api/Job/Create', data, {})
+            axios.post('http://localhost:24151/api/Job/Create', data, {})
                 .then(res => {
                     if (res.status === 200) {
                         setMessage('Tải thành công file: ' + jobFile.name);

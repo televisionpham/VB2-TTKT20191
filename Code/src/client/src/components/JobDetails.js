@@ -27,7 +27,7 @@ class JobDetails extends Component {
     }
 
     getJobFiles() {
-        axios.get(`http://localhost/VYT.ApplicationService/api/Job/GetFiles?id=${this.props.job.Id}&type=-1`)
+        axios.get(`http://localhost:24151/api/Job/GetFiles?id=${this.props.job.Id}&type=-1`)
             .then(res => {
                 this.setState({ jobFiles: [...res.data] })
             });
@@ -43,7 +43,7 @@ class JobDetails extends Component {
                     label: 'Có',
                     onClick: () => {
                         this.props.job.State = 0;
-                        axios.put(`http://localhost/VYT.ApplicationService/api/Job/`, this.props.job)
+                        axios.put(`http://localhost:24151/api/Job/`, this.props.job)
                             .then(res => {                                
                             })
                             .catch(err => {
@@ -72,7 +72,7 @@ class JobDetails extends Component {
                 {
                     label: 'Có',
                     onClick: () => {
-                        axios.delete(`http://localhost/VYT.ApplicationService/api/Job/${jobId}`)
+                        axios.delete(`http://localhost:24151/api/Job/${jobId}`)
                             .then(res => {
                                 
                             })
