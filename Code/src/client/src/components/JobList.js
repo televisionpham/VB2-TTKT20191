@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import JobDetails from './JobDetails'
+import { BASE_ADDRESS } from '../constants';
 
 class JobList extends Component {    
     state = {
@@ -18,7 +19,7 @@ class JobList extends Component {
     };
 
     refresh() {
-        axios.get(`http://localhost:24151/api/Job/Total`)
+        axios.get(`${BASE_ADDRESS}/api/Job/Total`)
             .then(res => {
                 this.setState({ totalJobs: res.data });
             });
@@ -30,7 +31,7 @@ class JobList extends Component {
     }
 
     getJobPage(pageIndex, pageSize) {
-        axios.get(`http://localhost:24151/api/Job?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+        axios.get(`${BASE_ADDRESS}/api/Job?pageIndex=${pageIndex}&pageSize=${pageSize}`)
             .then(res => {
                 this.setState({ jobs: res.data });
             });

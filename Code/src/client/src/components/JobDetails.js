@@ -4,6 +4,7 @@ import moment from 'moment'
 import JobFileItem from './JobFileItem';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { BASE_ADDRESS } from "../constants";
 
 class JobDetails extends Component {    
     
@@ -27,7 +28,7 @@ class JobDetails extends Component {
     }
 
     getJobFiles() {
-        axios.get(`http://localhost:24151/api/Job/GetFiles?id=${this.props.job.Id}&type=-1`)
+        axios.get(`${BASE_ADDRESS}/api/Job/GetFiles?id=${this.props.job.Id}&type=-1`)
             .then(res => {
                 this.setState({ jobFiles: [...res.data] })
             });
@@ -43,7 +44,7 @@ class JobDetails extends Component {
                     label: 'Có',
                     onClick: () => {
                         this.props.job.State = 0;
-                        axios.put(`http://localhost:24151/api/Job/`, this.props.job)
+                        axios.put(`${BASE_ADDRESS}/api/Job/`, this.props.job)
                             .then(res => {                                
                             })
                             .catch(err => {
@@ -72,7 +73,7 @@ class JobDetails extends Component {
                 {
                     label: 'Có',
                     onClick: () => {
-                        axios.delete(`http://localhost:24151/api/Job/${jobId}`)
+                        axios.delete(`${BASE_ADDRESS}/api/Job/${jobId}`)
                             .then(res => {
                                 
                             })
