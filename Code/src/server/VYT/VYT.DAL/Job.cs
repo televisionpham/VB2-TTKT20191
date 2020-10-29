@@ -29,8 +29,10 @@ namespace VYT.DAL
         public string Notes { get; set; }
         public int DocumentPages { get; set; }
         public Nullable<System.DateTime> Processed { get; set; }
+        public int UserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FileStorage> FileStorages { get; set; }
+        public virtual User User { get; set; }
     }
 }

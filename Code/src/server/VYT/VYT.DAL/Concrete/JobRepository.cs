@@ -44,10 +44,10 @@ namespace VYT.DAL.Concrete
             }
         }
 
-        public override IEnumerable<VYT.Models.Job> GetPage(int pageIndex, int pageSize)
+        public IEnumerable<VYT.Models.Job> GetPage(int userId, int pageIndex, int pageSize)
         {
             var jobs = new List<VYT.Models.Job>();
-            var results = _dbContext.usp_Job_GetPage(pageIndex - 1, pageSize);
+            var results = _dbContext.usp_Job_GetPage(userId, pageIndex - 1, pageSize);
             foreach (var result in results)
             {
                 var job = new VYT.Models.Job
@@ -66,9 +66,9 @@ namespace VYT.DAL.Concrete
             }
             return jobs;
         }
-        public override VYT.Models.Job Add(VYT.Models.Job entity)
+        public VYT.Models.Job Add(int userId, VYT.Models.Job entity)
         {
-            var result = _dbContext.usp_Job_Add(entity.Name, entity.Languages).FirstOrDefault();
+            var result = _dbContext.usp_Job_Add(userId, entity.Name, entity.Languages).FirstOrDefault();
             if (result != null)
             {
                 entity.Id = result.Id;
@@ -136,10 +136,10 @@ namespace VYT.DAL.Concrete
             return files;
         }
 
-        public IEnumerable<Models.Job> GetByState(JobStateEnum state, int limit)
+        public IEnumerable<Models.Job> GetByState(int userId, JobStateEnum state, int limit)
         {
             var jobs = new List<Models.Job>();
-            var results = _dbContext.usp_Job_GetByState((int)state, limit);
+            var results = _dbContext.usp_Job_GetByState(userId, (int)state, limit);
             foreach (var item in results)
             {
                 jobs.Add(new Models.Job

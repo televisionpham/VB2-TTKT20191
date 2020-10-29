@@ -12,17 +12,12 @@ namespace VYT.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class FileStorage
+    public partial class sysdiagram
     {
-        public int Id { get; set; }
-        public int JobId { get; set; }
-        public int Type { get; set; }
-        public Nullable<long> FileSize { get; set; }
-        public string Description { get; set; }
-        public string FilePath { get; set; }
-        public string FileType { get; set; }
-        public Nullable<int> UserId { get; set; }
-    
-        public virtual Job Job { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

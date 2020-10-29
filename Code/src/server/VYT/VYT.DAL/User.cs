@@ -12,17 +12,19 @@ namespace VYT.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class FileStorage
+    public partial class User
     {
-        public int Id { get; set; }
-        public int JobId { get; set; }
-        public int Type { get; set; }
-        public Nullable<long> FileSize { get; set; }
-        public string Description { get; set; }
-        public string FilePath { get; set; }
-        public string FileType { get; set; }
-        public Nullable<int> UserId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Jobs = new HashSet<Job>();
+        }
     
-        public virtual Job Job { get; set; }
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Job> Jobs { get; set; }
     }
 }

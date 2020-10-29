@@ -11,7 +11,6 @@ namespace VYT.DAL.Abstract
     {
         int GetTotal();
         T Get(int id);
-        IEnumerable<T> GetPage(int pageIndex, int pageSize);
         T Add(T entity);
         void Remove(int id);
         void Update(T entity);

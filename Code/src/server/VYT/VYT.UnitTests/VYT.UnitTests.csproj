@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DALTests.cs" />
     <Compile Include="WebApiClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\VYT.ApplicationServiceClient\VYT.ApplicationServiceClient.csproj">
       <Project>{67B47F7D-06EA-4CB9-9AF3-E6EFE3EA21CE}</Project>
       <Name>VYT.ApplicationServiceClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VYT.DAL\VYT.DAL.csproj">
+      <Project>{B94C9753-D160-4E45-9F55-8C7ACCDCC854}</Project>
+      <Name>VYT.DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\VYT.Models\VYT.Models.csproj">
       <Project>{806FD456-D38E-4610-8BC0-962E700F9BC5}</Project>

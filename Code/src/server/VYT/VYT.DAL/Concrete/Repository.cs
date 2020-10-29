@@ -33,11 +33,6 @@ namespace VYT.DAL.Concrete
             return _dbContext.Set<T>().Count();
         }
 
-        public virtual IEnumerable<T> GetPage(int pageIndex, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual void Remove(int id)
         {
             throw new NotImplementedException();

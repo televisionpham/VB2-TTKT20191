@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using VYT.Models;
 
 namespace VYT.ApplicationService.Controllers
 {
-    [EnableCors(origins:"http://localhost:3000", headers: "*", methods: "*")]
+    //[EnableCors(origins:"http://localhost:3000", headers: "*", methods: "*")]
     public class JobController : ApiController
     {
         private const string FILE_STORAGE = "~/FileStorage";
@@ -35,16 +34,16 @@ namespace VYT.ApplicationService.Controllers
             return _uow.JobRepository.GetTotal();
         }
 
-        public IEnumerable<VYT.Models.Job> GetPage(int pageIndex, int pageSize)
+        public IEnumerable<VYT.Models.Job> GetPage(int userId, int pageIndex, int pageSize)
         {
-            return _uow.JobRepository.GetPage(pageIndex, pageSize);
+            return _uow.JobRepository.GetPage(userId, pageIndex, pageSize);
         }
 
         [HttpGet]
         [Route("api/Job/GetByState")]
-        public IEnumerable<VYT.Models.Job> GetByState(JobStateEnum state, int limit)
+        public IEnumerable<VYT.Models.Job> GetByState(int userId, JobStateEnum state, int limit)
         {
-            return _uow.JobRepository.GetByState(state, limit);
+            return _uow.JobRepository.GetByState(userId, state, limit);
         }
 
         [HttpPut]

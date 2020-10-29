@@ -29,9 +29,15 @@ namespace VYT.DAL
     
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     
-        public virtual ObjectResult<usp_Job_Add_Result> usp_Job_Add(string name, string languages)
+        public virtual ObjectResult<usp_Job_Add_Result> usp_Job_Add(Nullable<int> userId, string name, string languages)
         {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
             var nameParameter = name != null ?
                 new ObjectParameter("name", name) :
                 new ObjectParameter("name", typeof(string));
@@ -40,7 +46,7 @@ namespace VYT.DAL
                 new ObjectParameter("languages", languages) :
                 new ObjectParameter("languages", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Add_Result>("usp_Job_Add", nameParameter, languagesParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Add_Result>("usp_Job_Add", userIdParameter, nameParameter, languagesParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> usp_Job_GetTotal()
@@ -179,8 +185,12 @@ namespace VYT.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_Get_Result>("usp_Job_Get", jobIdParameter);
         }
     
-        public virtual ObjectResult<usp_Job_GetByState_Result> usp_Job_GetByState(Nullable<int> state, Nullable<int> limit)
+        public virtual ObjectResult<usp_Job_GetByState_Result> usp_Job_GetByState(Nullable<int> userId, Nullable<int> state, Nullable<int> limit)
         {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
             var stateParameter = state.HasValue ?
                 new ObjectParameter("state", state) :
                 new ObjectParameter("state", typeof(int));
@@ -189,11 +199,15 @@ namespace VYT.DAL
                 new ObjectParameter("limit", limit) :
                 new ObjectParameter("limit", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetByState_Result>("usp_Job_GetByState", stateParameter, limitParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetByState_Result>("usp_Job_GetByState", userIdParameter, stateParameter, limitParameter);
         }
     
-        public virtual ObjectResult<usp_Job_GetPage_Result> usp_Job_GetPage(Nullable<int> pageIndex, Nullable<int> pageSize)
+        public virtual ObjectResult<usp_Job_GetPage_Result> usp_Job_GetPage(Nullable<int> userId, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
             var pageIndexParameter = pageIndex.HasValue ?
                 new ObjectParameter("pageIndex", pageIndex) :
                 new ObjectParameter("pageIndex", typeof(int));
@@ -202,7 +216,136 @@ namespace VYT.DAL
                 new ObjectParameter("pageSize", pageSize) :
                 new ObjectParameter("pageSize", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result>("usp_Job_GetPage", pageIndexParameter, pageSizeParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Job_GetPage_Result>("usp_Job_GetPage", userIdParameter, pageIndexParameter, pageSizeParameter);
+        }
+    
+        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var new_diagramnameParameter = new_diagramname != null ?
+                new ObjectParameter("new_diagramname", new_diagramname) :
+                new ObjectParameter("new_diagramname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
+        }
+    
+        public virtual int sp_upgraddiagrams()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual ObjectResult<usp_User_Add_Result> usp_User_Add(string email, string passwordHash)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            var passwordHashParameter = passwordHash != null ?
+                new ObjectParameter("passwordHash", passwordHash) :
+                new ObjectParameter("passwordHash", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_User_Add_Result>("usp_User_Add", emailParameter, passwordHashParameter);
+        }
+    
+        public virtual ObjectResult<usp_User_Get_Result> usp_User_Get(string email, string passwordHash)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            var passwordHashParameter = passwordHash != null ?
+                new ObjectParameter("passwordHash", passwordHash) :
+                new ObjectParameter("passwordHash", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_User_Get_Result>("usp_User_Get", emailParameter, passwordHashParameter);
         }
     }
 }

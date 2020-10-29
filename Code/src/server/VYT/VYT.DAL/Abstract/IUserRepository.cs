@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace VYT.DAL.Abstract
 {
-    public interface IUnitOfWork
+    public interface IUserRepository : IRepository<Models.User>
     {
-        IJobRepository JobRepository { get; }
-        IUserRepository UserRepository { get; }
+        Models.User Get(string email, string passwordHash);
     }
 }

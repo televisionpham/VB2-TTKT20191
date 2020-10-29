@@ -10,19 +10,13 @@
 namespace VYT.DAL
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class FileStorage
+    public partial class sp_helpdiagrams_Result
     {
-        public int Id { get; set; }
-        public int JobId { get; set; }
-        public int Type { get; set; }
-        public Nullable<long> FileSize { get; set; }
-        public string Description { get; set; }
-        public string FilePath { get; set; }
-        public string FileType { get; set; }
-        public Nullable<int> UserId { get; set; }
-    
-        public virtual Job Job { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }
