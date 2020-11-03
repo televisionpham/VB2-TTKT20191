@@ -47,7 +47,7 @@ namespace VYT.ProcessingStation.Service
                             continue;
                         }
 
-                        var result = _client.GetJobByState(JobStateEnum.Waiting, 1);
+                        var result = _client.GetAllJobByState(JobStateEnum.Waiting, 1);
                         result.Wait();
                         if (result.Result.Count() == 0)
                         {

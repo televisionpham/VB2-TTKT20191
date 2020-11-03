@@ -9,11 +9,12 @@ namespace VYT.DAL.Abstract
 {
     public interface IJobRepository : IRepository<VYT.Models.Job>
     {
-        Models.Job Add(int userId, Models.Job job);
+        Models.Job AddForUser(int userId, Models.Job job);
         JobFile AddJobFile(int jobId, string filePath, ResultTypeEnum type);
         IEnumerable<JobFile> GetJobFiles(int id, int type);
 
         IEnumerable<Models.Job> GetByState(int userId, JobStateEnum state, int limit);
-        IEnumerable<Models.Job> GetPage(int uesrId, int pageIndex, int pageSize);
+        IEnumerable<Models.Job> GetPage(int userId, int pageIndex, int pageSize);
+        int GetTotalByUser(int userId);
     }
 }

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select'
 import { BASE_ADDRESS } from "../constants";
+import { AuthContext } from '../contexts/AuthContext';
 
 const UploadFileForm = () => {
+    const {auth} = useContext(AuthContext);
     const options = [
         { value: 'vie', label: 'Tiếng Việt' },
         { value: 'en', label: 'Tiếng Anh' },
@@ -15,25 +17,25 @@ const UploadFileForm = () => {
     const [jobFiles, setJobFile] = useState([]);
     const [languages, setLanguages] = useState('vie');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(jobFiles);
+        let count = 0;
         for (let i = 0; i < jobFiles.length; i++) {
             const jobFile = jobFiles[i];
             let data = new FormData();
             data.append('jobFile', jobFile);
             data.append('languages', languages);
-            axios.post(BASE_ADDRESS + '/api/Job/Create', data, {})
-                .then(res => {
-                    if (res.status === 200) {
-
-                    } else {
-                        alert(res.statusText);
-                    }
-                })
-                .catch(err => {
-                    alert(err);
-                })
+            data.append('userId', auth.userId);
+            try {
+                await axios.post(BASE_ADDRESS + '/api/Job/Create', data, {});
+                count += 1;
+            } catch (err) {
+                console.log(err);
+                alert(err);
+            }                            
+        }        
+        if (count === jobFiles.length && count > 0) {
+            alert('Upload file thành công.');
         }
     }
 

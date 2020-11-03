@@ -17,9 +17,9 @@ namespace VYT.ApplicationServiceClient
             _client.BaseAddress = new Uri(baseAddress);
         }
 
-        public async Task<int> GetTotalJobs()
+        public async Task<int> GetTotalJobs(int userId)
         {
-            var path = $"{_client.BaseAddress}/api/Job/Total";
+            var path = $"{_client.BaseAddress}/api/Job/Total?userId={userId}";
             var resp = await _client.GetAsync(path);
             if (resp.IsSuccessStatusCode)
             {
@@ -47,9 +47,9 @@ namespace VYT.ApplicationServiceClient
             }
         }
 
-        public async Task<IEnumerable<Models.Job>> GetJobPage(int pageIndex, int pageSize)
+        public async Task<IEnumerable<Models.Job>> GetJobPage(int userId, int pageIndex, int pageSize)
         {
-            var path = $"{_client.BaseAddress}/api/Job?pageIndex={pageIndex}&pageSize={pageSize}";
+            var path = $"{_client.BaseAddress}/api/Job?userId={userId}&pageIndex={pageIndex}&pageSize={pageSize}";
             var resp = await _client.GetAsync(path);
             if (resp.IsSuccessStatusCode)
             {
@@ -62,9 +62,24 @@ namespace VYT.ApplicationServiceClient
             }
         }
 
-        public async Task<IEnumerable<Models.Job>> GetJobByState(JobStateEnum state, int limit)
+        public async Task<IEnumerable<Models.Job>> GetJobByState(int userId, JobStateEnum state, int limit)
         {
-            var path = $"{_client.BaseAddress}/api/Job/GetByState?state={(int)state}&limit={limit}";
+            var path = $"{_client.BaseAddress}/api/Job/GetByState?userid={userId}&state={(int)state}&limit={limit}";
+            var resp = await _client.GetAsync(path);
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = await resp.Content.ReadAsAsync<IEnumerable<Models.Job>>();
+                return result;
+            }
+            else
+            {
+                throw new Exception($"{resp.ReasonPhrase}");
+            }
+        }
+
+        public async Task<IEnumerable<Models.Job>> GetAllJobByState(JobStateEnum state, int limit)
+        {
+            var path = $"{_client.BaseAddress}/api/Job/GetAllByState?state={(int)state}&limit={limit}";
             var resp = await _client.GetAsync(path);
             if (resp.IsSuccessStatusCode)
             {
@@ -106,11 +121,12 @@ namespace VYT.ApplicationServiceClient
             return resp;
         }
 
-        public async Task<Models.Job> CreateJob(string filePath, string languages)
+        public async Task<Models.Job> CreateJob(string userId, string filePath, string languages)
         {
             var path = $"{_client.BaseAddress}/api/Job/Create";
             var multiForm = new MultipartFormDataContent();
             multiForm.Add(new StringContent(languages), "Languages");
+            multiForm.Add(new StringContent(userId), "UserId");
             using (var fs = File.OpenRead(filePath))
             {
                 multiForm.Add(new StreamContent(fs), "File", Path.GetFileName(filePath));

@@ -34,7 +34,16 @@ namespace VYT.ApplicationService.Helpers
                     required = true,
                     type = "string"
                 });
-                
+
+                operation.parameters.Add(new Parameter
+                {
+                    name = "userId",
+                    @in = "formData",
+                    description = "User Id",
+                    required = true,
+                    type = "string"
+                });
+
                 operation.consumes.Add("application/form-data");
             }
             else if (operation.operationId.ToLower() == "job_addjobfile")

@@ -5,8 +5,8 @@ using VYT.DAL;
 using VYT.DAL.Abstract;
 
 namespace VYT.ApplicationService.Controllers
-{
-    //[EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+{    
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -28,7 +28,7 @@ namespace VYT.ApplicationService.Controllers
             catch (System.Exception ex)
             {
                 _logger.Error(ex);
-                throw;
+                throw ex;
             }
         }
 

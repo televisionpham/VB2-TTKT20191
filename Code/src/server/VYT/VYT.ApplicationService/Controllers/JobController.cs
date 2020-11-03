@@ -15,7 +15,7 @@ using VYT.Models;
 
 namespace VYT.ApplicationService.Controllers
 {
-    //[EnableCors(origins:"http://localhost:3000", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class JobController : ApiController
     {
         private const string FILE_STORAGE = "~/FileStorage";
@@ -29,9 +29,9 @@ namespace VYT.ApplicationService.Controllers
 
         [HttpGet]
         [Route("api/Job/Total")]
-        public int GetTotal()
+        public int GetTotal(int userId)
         {
-            return _uow.JobRepository.GetTotal();
+            return _uow.JobRepository.GetTotalByUser(userId);
         }
 
         public IEnumerable<VYT.Models.Job> GetPage(int userId, int pageIndex, int pageSize)
@@ -44,6 +44,13 @@ namespace VYT.ApplicationService.Controllers
         public IEnumerable<VYT.Models.Job> GetByState(int userId, JobStateEnum state, int limit)
         {
             return _uow.JobRepository.GetByState(userId, state, limit);
+        }
+
+        [HttpGet]
+        [Route("api/Job/GetAllByState")]
+        public IEnumerable<VYT.Models.Job> GetAllByState(JobStateEnum state, int limit)
+        {
+            return _uow.JobRepository.GetByState(0, state, limit);
         }
 
         [HttpPut]
@@ -88,7 +95,12 @@ namespace VYT.ApplicationService.Controllers
                     //_logger.Trace($"{"Server file path: " + file.LocalFileName}; File Name: {file.Headers.ContentDisposition.FileName}");
                     try
                     {
-                        var job = _uow.JobRepository.Add(new VYT.Models.Job()
+                        int userId;
+                        if (!int.TryParse(provider.FormData["userId"], out userId))
+                        {
+                            throw new ArgumentException($"Invalid user id value: {provider.FormData["userId"]}");
+                        }                        
+                        var job = _uow.JobRepository.AddForUser(userId, new VYT.Models.Job()
                         {
                             Name = file.Headers.ContentDisposition.FileName.Trim('"'),
                             Languages = provider.FormData["languages"]
@@ -194,6 +206,6 @@ namespace VYT.ApplicationService.Controllers
                 file.FilePath = $"{baseUrl}/FileStorage/{id}/{Path.GetFileName(file.FilePath)}";
             }
             return files;
-        }
+        }        
     }
 }

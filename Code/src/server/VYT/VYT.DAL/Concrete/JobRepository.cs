@@ -15,9 +15,9 @@ namespace VYT.DAL.Concrete
         public JobRepository(DbContext dbContext) : base(dbContext)
         {
         }
-        public override int GetTotal()
+        public int GetTotalByUser(int userId)
         {
-            return _dbContext.Set<Job>().Count();
+            return _dbContext.Set<Job>().Count(x => x.UserId == userId);
         }
 
         public override VYT.Models.Job Get(int id)
@@ -66,7 +66,7 @@ namespace VYT.DAL.Concrete
             }
             return jobs;
         }
-        public VYT.Models.Job Add(int userId, VYT.Models.Job entity)
+        public VYT.Models.Job AddForUser(int userId, VYT.Models.Job entity)
         {
             var result = _dbContext.usp_Job_Add(userId, entity.Name, entity.Languages).FirstOrDefault();
             if (result != null)
