@@ -65,9 +65,17 @@ namespace VYT.ProcessingStation.Service
                         var now = DateTime.Now;
                         job.Duration = now - startTime;
                         job.DocumentPages = PdfUtil.GetTotalPages(outputFile);
+                        var ocrResult = PdfUtil.GetTextFromAllPages(outputFile);
+                        job.State = JobStateEnum.Processed;
+                        if (string.IsNullOrWhiteSpace(ocrResult))
+                        {
+                            job.Notes = "Không nhận dạng được";
+                            job.State = JobStateEnum.Error;
+                        }
+                        
                         var jobFile = _client.AddJobFile(job.Id, outputFile, ResultTypeEnum.OcrResult);
                         jobFile.Wait();
-                        job.State = JobStateEnum.Processed;
+                        
                         job.ProcessedDate = now;
                         _client.UpdateJob(job).Wait();                    
                     }
