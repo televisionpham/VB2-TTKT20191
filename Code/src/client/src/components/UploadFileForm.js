@@ -42,8 +42,9 @@ const UploadFileForm = () => {
                 let msg = 'Có tài liệu không nhận dạng được:\n';                
                 for (let i = 0; i < errorJobs.length; i++) {                    
                     msg += errorJobs[i].Name + '\n';                    
-                }                
-                openNotification('error', 'ERROR', msg);                
+                }       
+                    
+                openNotification('error', 'ERROR', msg);               
             }
         } catch (err) {
             console.log(err);

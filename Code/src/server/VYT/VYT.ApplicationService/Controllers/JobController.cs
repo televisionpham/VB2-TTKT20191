@@ -137,7 +137,7 @@ namespace VYT.ApplicationService.Controllers
                     }
                     count += 1;
                     Thread.Sleep(1000);
-                    if (count >= 60*2)
+                    if (count >= 60*5)
                     {
                         break;
                     }
