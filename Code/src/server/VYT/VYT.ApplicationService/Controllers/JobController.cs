@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Linq;
 using VYT.ApplicationService.Helpers;
 using VYT.DAL;
 using VYT.DAL.Abstract;
 using VYT.Models;
+using System.Threading;
 
 namespace VYT.ApplicationService.Controllers
 {
@@ -71,7 +73,7 @@ namespace VYT.ApplicationService.Controllers
         [ValidateMimeMultipartContentFilter]
         [HttpPost]
         [Route("api/Job/Create")]
-        public async Task<Models.Job> CreateJobFromFile()
+        public async Task<IEnumerable<Models.Job>> CreateJobFromFile()
         {            
             if (!Request.Content.IsMimeMultipartContent())
             {
@@ -85,7 +87,7 @@ namespace VYT.ApplicationService.Controllers
             }            
 
             var provider = new MultipartFormDataStreamProvider(uploadFolder);
-
+            var jobs = new List<Models.Job>();
             try
             {                
                 await Request.Content.ReadAsMultipartAsync(provider);
@@ -117,7 +119,7 @@ namespace VYT.ApplicationService.Controllers
                         File.Move(file.LocalFileName, filePath);
 
                         _uow.JobRepository.AddJobFile(job.Id, filePath, ResultTypeEnum.InputImage);
-                        return job;
+                        jobs.Add(job);
                     }
                     catch (Exception)
                     {
@@ -125,7 +127,29 @@ namespace VYT.ApplicationService.Controllers
                         throw;
                     }
                 }
-                return null;
+                var count = 0;
+                while (jobs.Any(x => x.State == JobStateEnum.Waiting || x.State == JobStateEnum.Processing))
+                { 
+                    foreach (var job in jobs)
+                    {
+                        var j = _uow.JobRepository.Get(job.Id);
+                        job.State = j.State;
+                    }
+                    count += 1;
+                    Thread.Sleep(1000);
+                    if (count >= 60*2)
+                    {
+                        break;
+                    }
+                }
+                foreach (var job in jobs)
+                {
+                    if (job.State == JobStateEnum.Error)
+                    {
+                        _uow.JobRepository.Remove(job.Id);
+                    }
+                }
+                return jobs;
             }
             catch (System.Exception e)
             {

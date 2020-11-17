@@ -3,9 +3,10 @@ import axios from 'axios';
 import Select from 'react-select'
 import { BASE_ADDRESS } from "../constants";
 import { AuthContext } from '../contexts/AuthContext';
+import { openNotification } from "./OpenNotification";
 
 const UploadFileForm = () => {
-    const {auth} = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
     const options = [
         { value: 'vie', label: 'Tiếng Việt' },
         { value: 'en', label: 'Tiếng Anh' },
@@ -19,23 +20,34 @@ const UploadFileForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let count = 0;
+        if (jobFiles.length === 0) {
+            return;
+        }
+
+        let data = new FormData();
+        data.append('languages', languages);
+        data.append('userId', auth.userId);
         for (let i = 0; i < jobFiles.length; i++) {
             const jobFile = jobFiles[i];
-            let data = new FormData();
+            console.log(jobFile);
             data.append('jobFile', jobFile);
-            data.append('languages', languages);
-            data.append('userId', auth.userId);
-            try {
-                await axios.post(BASE_ADDRESS + '/api/Job/Create', data, {});
-                count += 1;
-            } catch (err) {
-                console.log(err);
-                alert(err);
-            }                            
-        }        
-        if (count === jobFiles.length && count > 0) {
-            alert('Upload file thành công.');
+        }
+
+        try {
+            const response = await axios.post(BASE_ADDRESS + '/api/Job/Create', data, {});
+            console.log(response);             
+            const errorJobs = response.data.filter(j => j.State === -1);
+            console.log(errorJobs);
+            if (errorJobs.length > 0) {
+                let msg = 'Có tài liệu không nhận dạng được:\n';                
+                for (let i = 0; i < errorJobs.length; i++) {                    
+                    msg += errorJobs[i].Name + '\n';                    
+                }                
+                alert(msg);
+            }
+        } catch (err) {
+            console.log(err);
+            alert(err);
         }
     }
 
