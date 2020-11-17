@@ -7,6 +7,7 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthProvider from './contexts/AuthContext';
 import history from "./history";
+import "antd/dist/antd.css";
 
 function App() {
   return (

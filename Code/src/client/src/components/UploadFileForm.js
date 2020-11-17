@@ -43,7 +43,7 @@ const UploadFileForm = () => {
                 for (let i = 0; i < errorJobs.length; i++) {                    
                     msg += errorJobs[i].Name + '\n';                    
                 }                
-                alert(msg);
+                openNotification('error', 'ERROR', msg);                
             }
         } catch (err) {
             console.log(err);
